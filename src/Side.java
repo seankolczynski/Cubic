@@ -56,13 +56,13 @@ public class Side {
         this.squares[2][1] = topMid;
         this.squares[0][0] = bottomRight;
         this.squares[1][0] = midRight;
-        this.squares[2][0] =topRight;
+        this.squares[2][0] = topRight;
 
         this.front.sideClockwise(this.center);
 
     }
 
-    public void sideClockwise(int origin) {
+    private void sideClockwise(int origin) {
         this.sideClockwiseHelper(origin, 0, 0, 0, 0);
     }
 
@@ -70,6 +70,7 @@ public class Side {
         int origVal1;
         int origVal2;
         int origVal3;
+        Side next = this;
         int x1 = 0;
         int x2 = 1;
         int x3 = 2;
@@ -80,6 +81,7 @@ public class Side {
             y1 = 2;
             y2 = 2;
             y3 = 2;
+            next = left;
         }
         if (origin == right.center) {
             x1 = 2;
@@ -87,6 +89,7 @@ public class Side {
             y1 = 2;
             y2 = 1;
             y3 = 0;
+            next = front;
         }
         if (origin == back.center) {
             y1 = 0;
@@ -95,11 +98,13 @@ public class Side {
             x1 = 2;
             x2 = 1;
             x3 = 0;
+            next = right;
         }
         if (origin == left.center) {
             x1 = 0;
             x2 = 0;
             x3 = 0;
+            next = back;
         }
         origVal1 = this.squares[x1][y1];
         origVal2 = this.squares[x2][y2];
@@ -113,7 +118,90 @@ public class Side {
         if (count > 4) {
             return;
         } else {
-            this.sideClockwiseHelper(origin, origVal1, origVal2, origVal3, count);
+            next.sideClockwiseHelper(origin, origVal1, origVal2, origVal3, count);
+        }
+    }
+
+    public void turnCounterClockwise() {
+        int topLeft = this.squares[0][2];
+        int topMid = this.squares[1][2];
+        int topRight = this.squares[2][2];
+        int midLeft = this.squares[0][1];
+        int midRight = this.squares[2][1];
+        int bottomLeft = this.squares[0][0];
+        int bottomMid = this.squares[1][0];
+        int bottomRight = this.squares[2][0];
+
+        this.squares[0][2] = topRight;
+        this.squares[1][2] = midRight;
+        this.squares[2][2] = bottomRight;
+        this.squares[0][1] = topMid;
+        this.squares[2][1] = bottomMid;
+        this.squares[0][0] = topLeft;
+        this.squares[1][0] = midLeft;
+        this.squares[2][0] = bottomLeft;
+
+        this.front.sideCounterClockwise(this.center);
+
+    }
+
+    private void sideCounterClockwise(int origin) {
+        this.sideClockwiseHelper(origin, 0, 0, 0, 0);
+    }
+
+    private void sideCounterClockwiseHelper(int origin, int val1, int val2, int val3, int count) {
+        int origVal1;
+        int origVal2;
+        int origVal3;
+        Side next = this;
+        int x1 = 0;
+        int x2 = 1;
+        int x3 = 2;
+        int y1 = 0;
+        int y2 = 1;
+        int y3 = 2;
+        if (origin == front.center) {
+            x1 = 2;
+            x2 = 1;
+            x3 = 0;
+            y1 = 2;
+            y2 = 2;
+            y3 = 2;
+            next = this.right;
+        }
+        if (origin == right.center) {
+            x1 = 2;
+            x2 = 2;
+            next = this.back;
+        }
+        if (origin == back.center) {
+            y1 = 0;
+            y2 = 0;
+            y3 = 0;
+            next = this.left;
+        }
+        if (origin == left.center) {
+            x1 = 0;
+            x2 = 0;
+            x3 = 0;
+            y1 = 2;
+            y2 = 1;
+            y3 = 0;
+            next = this.front;
+        }
+        origVal1 = this.squares[x1][y1];
+        origVal2 = this.squares[x2][y2];
+        origVal3 = this.squares[x3][y3];
+        if (count > 0) {
+            this.squares[x1][y1] = val1;
+            this.squares[x2][y2] = val2;
+            this.squares[x3][y3] = val3;
+        }
+        count++;
+        if (count > 4) {
+            return;
+        } else {
+            next.sideCounterClockwiseHelper(origin, origVal1, origVal2, origVal3, count);
         }
     }
 
