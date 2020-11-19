@@ -146,7 +146,7 @@ public class Side {
     }
 
     private void sideCounterClockwise(int origin) {
-        this.sideClockwiseHelper(origin, 0, 0, 0, 0);
+        this.sideCounterClockwiseHelper(origin, 0, 0, 0, 0);
     }
 
     private void sideCounterClockwiseHelper(int origin, int val1, int val2, int val3, int count) {

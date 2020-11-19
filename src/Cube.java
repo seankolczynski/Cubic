@@ -1,6 +1,26 @@
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Representation of a Rubik's Cube. Has six sides, each of which can be rotated.
+ *
+ * Below is the layout of the cube, as enforced by the setupConnections method
+ *
+ *          B B B
+ *          B B B
+ *          B B B
+ *    O O O W W W R R R
+ *    O O O W W W R R R
+ *    O O O W W W R R R
+ *          G G G
+ *          G G G
+ *          G G G
+ *          Y Y Y
+ *          Y Y Y
+ *          Y Y Y
+ *
+ *
+ */
 public class Cube {
     private Side red;
     private Side blue;
@@ -10,6 +30,7 @@ public class Cube {
     private Side orange;
     private ArrayList<Side> asList;
 
+    //Constructor
     public Cube() {
         this.white = new Side(1);
         this.blue = new Side(2);
@@ -27,6 +48,9 @@ public class Cube {
         this.asList.add(this.yellow);
     }
 
+    /**
+     * The messy bits. Basically assigns all the side relations of each face
+     */
     private void setupConnections() {
         this.white = this.white.setEdges(this.blue, this.red, this.green, this.orange);
         this.blue = this.blue.setEdges(this.yellow, this.red, this.white, this.orange);
@@ -36,6 +60,11 @@ public class Cube {
         this.green = this.green.setEdges(this.white, this.red, this.yellow, this.orange);
     }
 
+    /**
+     *  Rotates the cube
+     *  Color: The side being spun
+     *  Dir: True = clockwise, false = counterclockwise
+     */
     public void rotate(Color color, boolean dir) {
         Side chosen = this.getSide(color);
         if (dir) {

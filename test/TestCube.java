@@ -5,9 +5,16 @@ import org.junit.Test;
 public class TestCube {
 
     @Test
-    public void testOne() {
+    public void testClockwise() {
         Cube cub = new Cube();
         cub.rotate(Color.WHITE, true);
+        System.out.println(cub.toString());
+    }
+
+    @Test
+    public void testCounterClockwise() {
+        Cube cub = new Cube();
+        cub.rotate(Color.WHITE, false);
         System.out.println(cub.toString());
     }
 
