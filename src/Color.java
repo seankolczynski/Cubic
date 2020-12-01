@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Color {
     RED ('R'),
     BLUE('B'),
@@ -15,6 +18,7 @@ public enum Color {
     public Character getLetter() {
         return this.letter;
     }
+
 
 }
 

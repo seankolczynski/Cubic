@@ -1,4 +1,8 @@
-
+/**
+ * Represents one side of the Cube. NOTE! the Side relation fields (front, right, back, left) are exclusive to this side!
+ * !!!THESE ARE NOT THE SAME AS THE UNIVERSAL FRONT, RIGHT, BACK, LEFT, UP, DOWN OF THE CUBE!!!
+ * These sides are JUST used for passing along the side's values.
+ */
 public class Side {
     private Side front;
     private Side right;

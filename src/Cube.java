@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Representation of a Rubik's Cube. Has six sides, each of which can be rotated.
@@ -88,6 +89,20 @@ public class Cube {
             default:
                 throw new IllegalArgumentException("Not a color");
         }
+    }
+
+    public Cube shuffle(int moves) {
+        System.out.println("BEFORE SHUFFLE\n");
+        System.out.println(this.toString());
+        Random random = new Random();
+        for (int turn = 1; turn <= moves; turn++) {
+            boolean dir = random.nextBoolean();
+            Color[] colors = Color.RED.getDeclaringClass().getEnumConstants();
+            this.rotate(colors[random.nextInt(colors.length)], dir);
+        }
+        System.out.println("AFTER SHUFFLE\n");
+        System.out.println(this.toString());
+        return this;
     }
 
 
