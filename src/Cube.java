@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -6,18 +5,15 @@ import java.util.ArrayList;
  *
  * Below is the layout of the cube, as enforced by the setupConnections method
  *
- *          B B B
- *          B B B
- *          B B B
- *    O O O W W W R R R
- *    O O O W W W R R R
- *    O O O W W W R R R
- *          G G G
- *          G G G
- *          G G G
- *          Y Y Y
- *          Y Y Y
- *          Y Y Y
+ *       W W W
+ *       W W W
+ *       W W W
+ * O O O G G G R R R B B B
+ * O O O G G G R R R B B B
+ * O O O G G G R R R B B B
+ *       Y Y Y
+ *       Y Y Y
+ *       Y Y Y
  *
  *
  */

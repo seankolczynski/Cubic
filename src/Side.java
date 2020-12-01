@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 
 public class Side {
     private Side front;
