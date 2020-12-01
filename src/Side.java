@@ -4,12 +4,12 @@ public class Side {
     private Side right;
     private Side back;
     private Side left;
-    Integer[][] squares;
-    int center;
+    public Character[][] squares;
+    Character center;
 
-    Side(int i) {
+    Side(Character i) {
         this.center = i;
-        Integer[][] arr = new Integer[3][3];
+        Character[][] arr = new Character[3][3];
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 arr[x][y] = i;
@@ -39,14 +39,14 @@ public class Side {
     }
 
     public void turnClockwise() {
-        int topLeft = this.squares[0][2];
-        int topMid = this.squares[1][2];
-        int topRight = this.squares[2][2];
-        int midLeft = this.squares[0][1];
-        int midRight = this.squares[2][1];
-        int bottomLeft = this.squares[0][0];
-        int bottomMid = this.squares[1][0];
-        int bottomRight = this.squares[2][0];
+        Character topLeft = this.squares[0][2];
+        Character topMid = this.squares[1][2];
+        Character topRight = this.squares[2][2];
+        Character midLeft = this.squares[0][1];
+        Character midRight = this.squares[2][1];
+        Character bottomLeft = this.squares[0][0];
+        Character bottomMid = this.squares[1][0];
+        Character bottomRight = this.squares[2][0];
 
         this.squares[0][2] = bottomLeft;
         this.squares[1][2] = midLeft;
@@ -61,14 +61,14 @@ public class Side {
 
     }
 
-    private void sideClockwise(int origin) {
-        this.sideClockwiseHelper(origin, 0, 0, 0, 0);
+    private void sideClockwise(Character origin) {
+        this.sideClockwiseHelper(origin, null, null, null, 0);
     }
 
-    private void sideClockwiseHelper(int origin, int val1, int val2, int val3, int count) {
-        int origVal1;
-        int origVal2;
-        int origVal3;
+    private void sideClockwiseHelper(Character origin, Character val1, Character val2, Character val3, int count) {
+        Character origVal1;
+        Character origVal2;
+        Character origVal3;
         Side next = this;
         int x1 = 0;
         int x2 = 1;
@@ -122,14 +122,14 @@ public class Side {
     }
 
     public void turnCounterClockwise() {
-        int topLeft = this.squares[0][2];
-        int topMid = this.squares[1][2];
-        int topRight = this.squares[2][2];
-        int midLeft = this.squares[0][1];
-        int midRight = this.squares[2][1];
-        int bottomLeft = this.squares[0][0];
-        int bottomMid = this.squares[1][0];
-        int bottomRight = this.squares[2][0];
+        Character topLeft = this.squares[0][2];
+        Character topMid = this.squares[1][2];
+        Character topRight = this.squares[2][2];
+        Character midLeft = this.squares[0][1];
+        Character midRight = this.squares[2][1];
+        Character bottomLeft = this.squares[0][0];
+        Character bottomMid = this.squares[1][0];
+        Character bottomRight = this.squares[2][0];
 
         this.squares[0][2] = topRight;
         this.squares[1][2] = midRight;
@@ -144,14 +144,14 @@ public class Side {
 
     }
 
-    private void sideCounterClockwise(int origin) {
-        this.sideCounterClockwiseHelper(origin, 0, 0, 0, 0);
+    private void sideCounterClockwise(Character origin) {
+        this.sideCounterClockwiseHelper(origin, null, null, null, 0);
     }
 
-    private void sideCounterClockwiseHelper(int origin, int val1, int val2, int val3, int count) {
-        int origVal1;
-        int origVal2;
-        int origVal3;
+    private void sideCounterClockwiseHelper(Character origin, Character val1, Character val2, Character val3, int count) {
+        Character origVal1;
+        Character origVal2;
+        Character origVal3;
         Side next = this;
         int x1 = 0;
         int x2 = 1;
@@ -202,6 +202,10 @@ public class Side {
         } else {
             next.sideCounterClockwiseHelper(origin, origVal1, origVal2, origVal3, count);
         }
+    }
+
+    public Character[][] getSquares() {
+        return this.squares;
     }
 
     @Override

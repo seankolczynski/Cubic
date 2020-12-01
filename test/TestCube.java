@@ -16,6 +16,8 @@ public class TestCube {
         Cube cub = new Cube();
         cub.rotate(Color.WHITE, false);
         System.out.println(cub.toString());
+        cub.rotate(Color.RED, false);
+        System.out.println(cub.toString());
     }
 
 }

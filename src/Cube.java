@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representation of a Rubik's Cube. Has six sides, each of which can be rotated.
@@ -28,12 +29,12 @@ public class Cube {
 
     //Constructor
     public Cube() {
-        this.white = new Side(1);
-        this.blue = new Side(2);
-        this.red = new Side(3);
-        this.orange = new Side(4);
-        this.green = new Side(5);
-        this.yellow = new Side(6);
+        this.white = new Side('W');
+        this.blue = new Side('B');
+        this.red = new Side('R');
+        this.orange = new Side('O');
+        this.green = new Side('G');
+        this.yellow = new Side('Y');
         this.setupConnections();
         this.asList = new ArrayList<Side>();
         this.asList.add(this.blue);
@@ -70,7 +71,7 @@ public class Cube {
         }
     }
 
-    private Side getSide(Color color) {
+    public Side getSide(Color color) {
         switch (color) {
             case RED:
                 return this.red;
@@ -89,48 +90,58 @@ public class Cube {
         }
     }
 
+
+
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         Side b = this.getSide(Color.BLUE);
+        Side w = this.getSide(Color.WHITE);
         for (int y = 2; y >= 0; y = y - 1) {
             sb.append(" ");
             sb.append(" ");
             sb.append(" ");
-            sb.append(b.squares[0][y]);
-            sb.append(b.squares[1][y]);
-            sb.append(b.squares[2][y]);
+            sb.append(" ");
+            sb.append(" ");
+            sb.append(" ");
+            sb.append(w.squares[0][y]);
+            sb.append(" ");
+            sb.append(w.squares[1][y]);
+            sb.append(" ");
+            sb.append(w.squares[2][y]);
             sb.append(" ");
             sb.append(" ");
             sb.append(" ");
             sb.append("\n");
         }
         Side o = this.getSide(Color.ORANGE);
-        Side w = this.getSide(Color.WHITE);
+        Side g = this.getSide(Color.GREEN);
         Side r = this.getSide(Color.RED);
         for (int y = 2; y >= 0; y = y - 1) {
             sb.append(o.squares[0][y]);
+            sb.append(" ");
             sb.append(o.squares[1][y]);
+            sb.append(" ");
             sb.append(o.squares[2][y]);
-            sb.append(w.squares[0][y]);
-            sb.append(w.squares[1][y]);
-            sb.append(w.squares[2][y]);
-            sb.append(r.squares[0][y]);
-            sb.append(r.squares[1][y]);
-            sb.append(r.squares[2][y]);
-            sb.append("\n");
-        }
-        Side g = this.getSide(Color.GREEN);
-        for (int y = 2; y >= 0; y = y - 1) {
-            sb.append(" ");
-            sb.append(" ");
             sb.append(" ");
             sb.append(g.squares[0][y]);
+            sb.append(" ");
             sb.append(g.squares[1][y]);
+            sb.append(" ");
             sb.append(g.squares[2][y]);
             sb.append(" ");
+            sb.append(r.squares[0][y]);
             sb.append(" ");
+            sb.append(r.squares[1][y]);
             sb.append(" ");
+            sb.append(r.squares[2][y]);
+            sb.append(" ");
+            sb.append(b.squares[0][y]);
+            sb.append(" ");
+            sb.append(b.squares[1][y]);
+            sb.append(" ");
+            sb.append(b.squares[2][y]);
+
             sb.append("\n");
         }
         Side ye = this.getSide(Color.YELLOW);
@@ -138,9 +149,15 @@ public class Cube {
             sb.append(" ");
             sb.append(" ");
             sb.append(" ");
+            sb.append(" ");
+            sb.append(" ");
+            sb.append(" ");
             sb.append(ye.squares[0][y]);
+            sb.append(" ");
             sb.append(ye.squares[1][y]);
+            sb.append(" ");
             sb.append(ye.squares[2][y]);
+            sb.append(" ");
             sb.append(" ");
             sb.append(" ");
             sb.append(" ");
