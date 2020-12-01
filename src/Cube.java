@@ -50,9 +50,9 @@ public class Cube {
      */
     private void setupConnections() {
         this.white = this.white.setEdges(this.blue, this.red, this.green, this.orange);
-        this.blue = this.blue.setEdges(this.yellow, this.red, this.white, this.orange);
-        this.red = this.red.setEdges(this.blue, this.yellow, this.green, this.white);
-        this.orange = this.orange.setEdges(this.blue, this.white, this.green, this.yellow);
+        this.blue = this.blue.setEdges(this.white, this.orange, this.yellow, this.red);
+        this.red = this.red.setEdges(this.white, this.blue, this.yellow, this.green);
+        this.orange = this.orange.setEdges(this.white, this.green, this.yellow, this.blue);
         this.yellow = this.yellow.setEdges(this.green, this.red, this.blue, this.orange);
         this.green = this.green.setEdges(this.white, this.red, this.yellow, this.orange);
     }

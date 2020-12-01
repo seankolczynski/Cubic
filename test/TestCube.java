@@ -1,6 +1,8 @@
-import static org.junit.Assert.assertEquals;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestCube {
 
@@ -17,6 +19,18 @@ public class TestCube {
         cub.rotate(Color.WHITE, false);
         System.out.println(cub.toString());
         cub.rotate(Color.RED, false);
+        System.out.println(cub.toString());
+    }
+
+    @Test
+    public void testEnum() {
+        assertEquals((Character)'W', Color.WHITE.getLetter());
+    }
+
+    @Test
+    public void orientation() {
+        Cube cub = new Cube();
+        cub.rotate(Color.WHITE, false);
         System.out.println(cub.toString());
     }
 
