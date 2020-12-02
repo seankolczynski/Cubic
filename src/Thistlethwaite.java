@@ -1,14 +1,17 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class Thistlethwaite {
 
     HashMap<Character, Color> colorToFace;
     Cube cube;
+    Random r;
 
 
     public Thistlethwaite() {
+        this.r = new Random();
     }
 
     public Cube solve(Cube cube) {
@@ -43,9 +46,10 @@ public class Thistlethwaite {
         Side downFace = this.cube.getSide(this.colorToFace.get('D'));
 
         int countBad = 1;
-        ArrayList<Edge> badEdges = new ArrayList();
+        ArrayList<Edge> badEdges;
         while (countBad > 0) {
             countBad = 0;
+            badEdges = new ArrayList();
             for (int x = 0; x < 3; x++) {
                 for (int y = 0; y < 3; y++) {
                     if ((x == 1 && y == 0) || (x == 1 && y == 2) || (x == 0 && y == 1) || (x == 2 && y == 1)) {
@@ -141,19 +145,19 @@ public class Thistlethwaite {
             ArrayList<Edge> downEdges = new ArrayList<>();
             ArrayList<Edge> midEdges = new ArrayList<>();
             for (Edge e : badEdges) {
-                if (e.secondary.equals('R') || e.secondary.equals('L')) {
-                    midCount++;
-                    midEdges.add(e);
-                } else if (e.secondary.equals('U')){
+                if (this.oneOnSide('U', e)) {
                     uCount++;
                     upEdges.add(e);
-                } else if (e.secondary.equals('D')) {
+                } else if (this.oneOnSide('D', e)) {
                     dCount++;
                     downEdges.add(e);
+                } else {
+                    midCount++;
+                    midEdges.add(e);
                 }
             }
             ArrayList<Move> moves = new ArrayList<Move>();
-            HashMap<Character, Character> translate = null;
+            HashMap<Character, Character> translate = horizontalMap('F');
             switch(badEdges.size()) {
                 case 0:
                     //By some miracle(.05% chance) no edges are bad! Do nothing.
@@ -166,7 +170,7 @@ public class Thistlethwaite {
                     if (dCount == 2) {
                         moves.add(Move.dRandom);
                     }
-                    if (uCount == 1) {
+                    else if (uCount == 1) {
                         if (dCount == 1) {
                             moves.add(Move.uRandom);
                             moves.add(Move.dRandom);
@@ -176,28 +180,103 @@ public class Thistlethwaite {
                             switch (m) {
                                 case FL:
                                     if (u.equals(Edge.FU)) {
-                                        
+                                        moves.add(Move.lCounter);
+                                    } else {
+                                        moves.add(Move.fClock);
+                                    }
+                                case FR:
+                                    if (u.equals(Edge.FU)) {
+                                        moves.add(Move.rClock);
+                                    } else {
+                                        moves.add(Move.fCounter);
+                                    }
+                                case BL:
+                                    if (u.equals(Edge.BU)) {
+                                        moves.add(Move.lCounter);
+                                    } else {
+                                        moves.add(Move.fClock);
+                                    }
+                                case BR:
+                                    if (u.equals(Edge.BU)) {
+                                        moves.add(Move.rClock);
+                                    } else {
+                                        moves.add(Move.fCounter);
                                     }
                             }
                         }
+                        moves.add(Move.uClock);
+                    } else if (dCount == 1) {
+                        if (midCount == 1) {
+                            Edge m = midEdges.get(0);
+                            Edge u = upEdges.get(0);
+                            switch (m) {
+                                case FL:
+                                    if (u.equals(Edge.FD)) {
+                                        moves.add(Move.lClock);
+                                    } else {
+                                        moves.add(Move.fCounter);
+                                    }
+                                case FR:
+                                    if (u.equals(Edge.FD)) {
+                                        moves.add(Move.rCounter);
+                                    } else {
+                                        moves.add(Move.fClock);
+                                    }
+                                case BL:
+                                    if (u.equals(Edge.BD)) {
+                                        moves.add(Move.lClock);
+                                    } else {
+                                        moves.add(Move.fCounter);
+                                    }
+                                case BR:
+                                    if (u.equals(Edge.BD)) {
+                                        moves.add(Move.rCounter);
+                                    } else {
+                                        moves.add(Move.fClock);
+                                    }
+                            }
+                        }
+                        moves.add(Move.dClock);
                     }
-
-
-
-
                 case 4:
                     if (uCount == 4) {
-                        this.cube.rotate(this.colorToFace.get('U'), true);
+                        moves.add(Move.uRandom);
                     } else if (dCount == 4) {
-                        this.cube.rotate(this.colorToFace.get('D'), true);
+                        moves.add(Move.dRandom);
                     } else if (midCount == 4) {
-                        this.cube.rotate(this.colorToFace.get('L'), true);
-                        this.cube.rotate(this.colorToFace.get('R'), true);
-                        this.cube.rotate(this.colorToFace.get('U'), true);
-                        this.cube.rotate(this.colorToFace.get('D'), true);
+                        moves.add(Move.lClock);
+                        moves.add(Move.rClock);
+                        moves.add(Move.uClock);
+                        moves.add(Move.dClock);
                     } else if (uCount == 2 && dCount == 2) {
-                        this.cube.rotate(this.colorToFace.get('U'), true);
-                        this.cube.rotate(this.colorToFace.get('D'), true);
+                        // Check if there are any down edges that dont share with up edges
+                        Edge upOne = upEdges.get(0);
+                        Edge upTwo = upEdges.get(1);
+                        Edge downOne = downEdges.get(0);
+                        Edge downTwo = downEdges.get(1);
+                        Character importantFaceOne;
+                        Character importantFaceTwo;
+                        if (downOne.primary.equals('U') || downOne.primary.equals('D')) {
+                            importantFaceOne = downOne.secondary;
+                        } else {
+                            importantFaceOne = downOne.primary;
+                        }
+                        if (downTwo.primary.equals('U') || downTwo.primary.equals('D')) {
+                            importantFaceTwo = downTwo.secondary;
+                        } else {
+                            importantFaceTwo = downTwo.primary;
+                        }
+                        if ((!this.shareFace(upOne, downOne) && !this.shareFace(upTwo, downOne)) ||
+                                (!this.shareFace(upOne, downTwo) && !this.shareFace(upTwo, downTwo))) {
+                            if (!this.shareFace(upOne, downOne) && !this.shareFace(upTwo, downOne)) {
+                                moves.add(Move.getMove(importantFaceOne, Direction.OneEighty));
+                            }
+                            if (!this.shareFace(upOne, downTwo) && !this.shareFace(upTwo, downTwo)) {
+                                moves.add(Move.getMove(importantFaceTwo, Direction.OneEighty));
+                            }
+                        } else {
+                            moves.add(Move.dClock);
+                        }
                     } else if (midCount == 2 && uCount == 2) {
                         Edge upOne = upEdges.get(0);
                         Edge upTwo = upEdges.get(1);
@@ -355,38 +434,47 @@ public class Thistlethwaite {
                                     moves.add(Move.lCounter);
                                     moves.add(Move.dEighty);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.uClock);
                                 } else if (translate.get('R').equals(downOne.primary) || translate.get('R').equals(downOne.secondary)) {
                                     moves.add(Move.dClock);
                                     moves.add(Move.rClock);
                                     moves.add(Move.lCounter);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.uClock);
                                 } else if (translate.get('L').equals(downOne.primary) || translate.get('L').equals(downOne.secondary)) {
                                     moves.add(Move.dCounter);
                                     moves.add(Move.rClock);
                                     moves.add(Move.lCounter);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.uClock);
                                 } else if (translate.get('B').equals(downOne.primary) || translate.get('B').equals(downOne.secondary)) {
                                     moves.add(Move.rClock);
                                     moves.add(Move.lCounter);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.uClock);
                                 }
-                            }
+                            } else
                             if (sharedFace.equals(downOne.primary) || sharedFace.equals(downOne.secondary)) {
                                 if (translate.get('R').equals(upOne.primary) || translate.get('R').equals(upOne.secondary)) {
                                     moves.add(Move.uCounter);
                                     moves.add(Move.rCounter);
                                     moves.add(Move.lClock);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.dClock);
                                 } else if (translate.get('L').equals(upOne.primary) || translate.get('L').equals(upOne.secondary)) {
                                     moves.add(Move.uClock);
                                     moves.add(Move.rCounter);
                                     moves.add(Move.lClock);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.dClock);
                                 } else if (translate.get('B').equals(upOne.primary) || translate.get('B').equals(upOne.secondary)) {
                                     moves.add(Move.rCounter);
                                     moves.add(Move.lClock);
                                     moves.add(Move.bEighty);
+                                    moves.add(Move.dClock);
                                 }
+                            } else {
+                                moves.add(Move.getMove(sharedFace, Direction.Clockwise));
                             }
                         } else {
                             this.cube.oneEighty(Color.GREEN);
@@ -395,84 +483,148 @@ public class Thistlethwaite {
                         Edge mid = midEdges.get(0);
                         Edge upOne = upEdges.get(0);
                         Edge upTwo = upEdges.get(1);
-                        Edge downOne = downEdges.get(0);
-                        while (this.onSide(downOne.primary, upOne, upTwo) || this.onSide(downOne.secondary, upOne, upTwo)) {
-                            this.cube.rotate(Color.WHITE, true);
-                        }
-                        Character downturn;
-                        if (downOne.primary.equals('D')) {
-                            downturn = downOne.secondary;
+                        if (this.onSide(mid.primary, upOne, upTwo)) {
+                            moves.add(Move.uClock);
                         } else {
-                            downturn = downOne.primary;
+                            moves.add(Move.getMove(mid.primary, Direction.Clockwise));
                         }
-                        this.cube.oneEighty(this.colorToFace.get(downturn));
-                        while (this.oneOnSide(mid.primary, upOne) || this.oneOnSide(mid.primary, upTwo) || this.oneOnSide(mid.primary, downOne)) {
-                            this.cube.rotate(Color.WHITE, true);
+                    } else if (midCount == 1 && uCount == 3) {
+                        Edge mid = midEdges.get(0);
+                        Edge upOne = upEdges.get(0);
+                        Edge upTwo = upEdges.get(1);
+                        Edge upThree = upEdges.get(2);
+                        if (this.onSide(mid.primary, upOne, upTwo) || this.oneOnSide(mid.primary, upThree)) {
+                            moves.add(Move.uClock);
+                        } else {
+                            moves.add(Move.getMove(mid.primary, Direction.Clockwise));
+                            moves.add(Move.uClock);
                         }
-                        moves.add(Move.getMove(mid.primary, Direction.Clockwise));
                     } else if (midCount == 1 && dCount == 2 & uCount == 1) {
                         Edge mid = midEdges.get(0);
                         Edge downOne = downEdges.get(0);
                         Edge downTwo = downEdges.get(1);
-                        Edge upOne = upEdges.get(0);
-                        while (this.onSide(downOne.primary, downOne, downTwo) || this.onSide(downOne.secondary, downOne, downTwo)) {
-                            this.cube.rotate(Color.YELLOW, true);
-                        }
-                        Character upturn;
-                        if (upOne.primary.equals('U')) {
-                            upturn = upOne.secondary;
+                        if (this.onSide(mid.primary, downOne, downTwo)) {
+                            moves.add(Move.dClock);
                         } else {
-                            upturn = upOne.primary;
+                            moves.add(Move.getMove(mid.primary, Direction.Counterclockwise));
                         }
-                        this.cube.oneEighty(this.colorToFace.get(upturn));
-                        while (this.oneOnSide(mid.primary, downOne) || this.oneOnSide(mid.primary, downTwo) || this.oneOnSide(mid.primary, upOne)) {
-                            this.cube.rotate(Color.YELLOW, true);
+                    } else if (midCount == 1 && dCount == 3) {
+                        Edge mid = midEdges.get(0);
+                        Edge downOne = downEdges.get(0);
+                        Edge downTwo = downEdges.get(1);
+                        Edge downThree = downEdges.get(2);
+                        if (this.onSide(mid.primary, downOne, downTwo) || this.oneOnSide(mid.primary, downThree)) {
+                            moves.add(Move.dClock);
+                        } else {
+                            moves.add(Move.getMove(mid.primary, Direction.Counterclockwise));
+                            moves.add(Move.dClock);
                         }
-                        moves.add(Move.getMove(mid.primary, Direction.Counterclockwise));
-                    } else if (dCount == 1 & uCount == 3) {
+                    } else if (midCount == 3 && uCount == 1) {
+                        
+                    }
+
+
+                    else if (dCount == 1 & uCount == 3) {
                         Edge upOne = upEdges.get(0);
                         Edge upTwo = upEdges.get(1);
                         Edge upThree = upEdges.get(2);
                         Edge downOne = downEdges.get(0);
-                        while (this.onSide(downOne.primary, upOne, upTwo) || this.onSide(downOne.secondary, upOne, upTwo) || this.oneOnSide(downOne.primary, upThree) || this.oneOnSide(downOne.secondary, upThree)) {
-                            this.cube.rotate(Color.WHITE, true);
-                        }
-                        Character downturn;
-                        if (downOne.primary.equals('D')) {
-                            downturn = downOne.secondary;
+                        if (this.onSide(downOne.primary, upOne, upTwo) || this.onSide(downOne.secondary, upOne, upTwo) || this.oneOnSide(downOne.primary, upThree) || this.oneOnSide(downOne.secondary, upThree)) {
+                            moves.add(Move.uClock);
                         } else {
-                            downturn = downOne.primary;
+                            Character downturn;
+                            if (downOne.primary.equals('D')) {
+                                downturn = downOne.secondary;
+                            } else {
+                                downturn = downOne.primary;
+                            }
+                            moves.add(Move.getMove(downturn, Direction.OneEighty));
+                            moves.add(Move.uClock);
                         }
-                        this.cube.oneEighty(this.colorToFace.get(downturn));
                     } else if (dCount == 3 & uCount == 1) {
                         Edge downOne = downEdges.get(0);
                         Edge downTwo = downEdges.get(1);
                         Edge downThree = downEdges.get(2);
                         Edge upOne = upEdges.get(0);
-                        while (this.onSide(upOne.primary, downOne, downTwo) || this.onSide(upOne.secondary, downOne, downTwo) || this.oneOnSide(upOne.primary, downThree) || this.oneOnSide(upOne.secondary, downThree)) {
-                            this.cube.rotate(Color.YELLOW, true);
-                        }
-                        Character upturn;
-                        if (upOne.primary.equals('U')) {
-                            upturn = upOne.secondary;
+                        if (this.onSide(upOne.primary, downOne, downTwo) || this.onSide(upOne.secondary, downOne, downTwo) || this.oneOnSide(upOne.primary, downThree) || this.oneOnSide(upOne.secondary, downThree)) {
+                            moves.add(Move.dClock);
                         } else {
-                            upturn = upOne.primary;
+                            Character upturn;
+                            if (upOne.primary.equals('U')) {
+                                upturn = upOne.secondary;
+                            } else {
+                                upturn = upOne.primary;
+                            }
+                            moves.add(Move.getMove(upturn, Direction.OneEighty));
+                            moves.add(Move.dClock);
                         }
-                        this.cube.oneEighty(this.colorToFace.get(upturn));
                     }
+                    break;
                 case 6:
-
-
+                    if(uCount > 1) {
+                        moves.add(Move.uRandom);
+                    }
+                    if (dCount > 1) {
+                        moves.add(Move.dRandom);
+                    }
+                    break;
+                case 8:
+                    if (uCount > 1) {
+                        moves.add(Move.uRandom);
+                    }
+                    if (dCount > 1) {
+                        moves.add(Move.dRandom);
+                    }
+                    break;
+                case 10:
+                    if (midCount == 2) {
+                        moves.add(Move.uRandom);
+                        moves.add(Move.dRandom);
+                    } else {
+                        ArrayList<Edge> goodEdges = new ArrayList<>();
+                        for (Edge e : Edge.values()) {
+                            if (!badEdges.contains(e))  {
+                                goodEdges.add(e);
+                            }
+                        }
+                        for (Edge ge : goodEdges) {
+                            switch (ge) {
+                                case FU: moves.add(Move.fRandom);
+                                case FD: moves.add(Move.fRandom);
+                                case BU: moves.add(Move.bRandom);
+                                case BD: moves.add(Move.bRandom);
+                                case UL: moves.add(Move.lRandom);
+                                case UR: moves.add(Move.rRandom);
+                                case DL: moves.add(Move.lRandom);
+                                case DR: moves.add(Move.rRandom);
+                            }
+                        }
+                        moves.add(Move.uRandom);
+                        moves.add(Move.dRandom);
+                    }
+                    break;
+                case 12:
+                    moves.add(Move.dClock);
+                    moves.add(Move.bClock);
+                    moves.add(Move.fClock);
+                    moves.add(Move.uClock);
+                    moves.add(Move.rCounter);
+                    moves.add(Move.lCounter);
+                    moves.add(Move.dClock);
+                    break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + badEdges.size());
             }
+            System.out.println(countBad);
             this.translateAndExecute(translate, moves);
+            System.out.println(cube.toString());
         }
-        System.out.println(countBad);
     }
 
     private HashMap<Character,Character> horizontalMap(Character c) {
         HashMap<Character, Character> result = new HashMap<Character, Character>();
+        result.put('U', 'U');
+        result.put('D', 'D');
         switch(c) {
             case 'F':
                 result.put('F', 'F');
@@ -494,6 +646,11 @@ public class Thistlethwaite {
                 result.put('R', 'B');
                 result.put('B', 'L');
                 result.put('L', 'F');
+            default:
+                result.put('F', 'F');
+                result.put('R', 'R');
+                result.put('B', 'B');
+                result.put('L', 'L');
         }
         return result;
     }
@@ -511,6 +668,25 @@ public class Thistlethwaite {
     }
 
     private void translateAndExecute(HashMap<Character, Character> map, List<Move> moves) {
+        for (Move move : moves) {
+            Character actual = map.get(move.face);
+            System.out.println("Original = " + move.face + " Actual = " + actual);
+            Color turning = colorToFace.get(actual);
+            switch (move.dir) {
+                case Random:
+                    this.cube.rotate(turning, r.nextBoolean());
+                    break;
+                case Clockwise:
+                    this.cube.rotate(turning, true);
+                    break;
+                case Counterclockwise:
+                    this.cube.rotate(turning, false);
+                    break;
+                case OneEighty:
+                    this.cube.oneEighty(turning);
+                    break;
+            }
+        }
 
     }
 

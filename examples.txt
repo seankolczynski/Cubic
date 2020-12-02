@@ -10,7 +10,7 @@ Explanation: The initial B' move placed the oriented BU edge into its line posit
 misoriented edges into the D-face, and placed the misoriented BD edge into a group 1 position. The final D turn oriented
 the 4 bad edges and completed the line.
 
-Scramble: F' B' U L2 D B R2 L2 U'
+Scramble: U' D' F L2 B D R2 L2 F'
 
 Observations: 8 misoriented edges, elimination in two groups of 4. Four bad edges already present in F face. DB and DF
 both in group 1 positions in B face
