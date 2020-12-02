@@ -6,7 +6,8 @@ the number of misoriented edges on the cube.
 0: Done, all edges are oriented.
 Chances: 1/2048 ~ 0.05%
 
-2: Move 1 to U/D and make an U/D quarter turn, swap newly oriented edge with second misoriented one, without disturbing any other U/D edges, and make the final U/D turn.
+2: Move 1 to U/D and make an U/D quarter turn, swap newly oriented edge with second misoriented one,
+without disturbing any other U/D edges, and make the final U/D turn.
 Chances: 66/2048 ~ 3.22%
 
 4: Move all misoriented edges to U/D and make an U/D quarter turn.

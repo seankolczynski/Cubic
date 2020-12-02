@@ -1,5 +1,6 @@
 public enum Direction {
     Clockwise,
     Counterclockwise,
-    OneEighty
+    OneEighty,
+    Random
 }

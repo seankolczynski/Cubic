@@ -22,9 +22,10 @@ public enum Edge {
 
     /**
      * Basic Dictionary that returns the number for a specific edge
+     *
      * @param side The side with the bad edge
-     * @param x The x position of that bad edge on the given side
-     * @param y The y position of that bad edge on the given side
+     * @param x    The x position of that bad edge on the given side
+     * @param y    The y position of that bad edge on the given side
      * @return Number corresponding with that edge.
      * FD = 1, FU = 2, FL = 3, FR = 4, BD = 5, BU = 6, BL = 7, BR = 8, UL = 9, UR = 10, DL = 11, DR = 12
      */
@@ -64,8 +65,7 @@ public enum Edge {
         }
         if (side.equals('D') && x == 2 && y == 1) {
             return DR;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Not given an edge");
         }
     }
