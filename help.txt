@@ -1,0 +1,38 @@
+A quarter turn of the U or D face causes its oriented edges to become misoriented, and its misoriented edges to become
+oriented. Using U/D quarter turns to orient up to four edges at a time is the core technique behind edge orientation.
+NOTE: U2 and D2 turns do not affect edge orientation. The following is a basic strategy for orienting edges, based on
+the number of misoriented edges on the cube.
+
+0: Done, all edges are oriented.
+Chances: 1/2048 ~ 0.05%
+
+2: Move 1 to U/D and make an U/D quarter turn, swap newly oriented edge with second misoriented one, without disturbing any other U/D edges, and make the final U/D turn.
+Chances: 66/2048 ~ 3.22%
+
+4: Move all misoriented edges to U/D and make an U/D quarter turn.
+Chances: 495/2048 ~ 24.17%
+
+6:Move 3 misoriented edges to U/D and make an U/D turn, 4 remain.
+OR Treat as 4 + 2
+Generally less efficient as it requires three U/D turns, compared to the two required in the 3 + 3 strategy.
+Chances: 924/2048 ~ 45.12%
+
+8: Treat as 4 + 4
+Chances: 495/2048 ~ 24.17%
+
+10: Treat as 4 + 4 + 2
+If you have this case, keep track of the two good edges, rather than the 10 bad edges. Use the initial moves to move the
+two good edges out of U/D, then turn both the U and D faces. Finally deal with the two remaining bad edges.
+Chances: 66/2048 ~ 3.22%
+
+12: Treat as 4 + 4 + 4
+This is a very rare case, but if you're lucky enough to encounter it, immediately do an U and D turn and you're left with four bad edges.
+Chances: 1/2048 ~ 0.05%
+
+These rules of thumb should help guide your decision making when manipulating bad edges:
+
+It is generally more efficient to chose the U/D face with most bad edges already on it for your initial U/D turn.
+It is generally less efficient if placement of a bad edge into U/D removes another bad edge from U/D.
+In cases with six or more bad edges, it is generally more efficient to eliminate the bad edges using both U and D faces rather than just one.
+In cases with six or more bad edges, it is generally more efficient if placement of a bad edge into a U/D face also places another edge into the opposite U/D face.
+Execution of U/D moves with only two opposite bad edges placed is futile from an edge orientation perspective, but can be useful for manipulation of line edges.

@@ -84,7 +84,7 @@ public class TestCube {
     public void testThist() {
         Thistlethwaite t = new Thistlethwaite();
         Cube c = new Cube();
-        c.shuffle(15);
+        c.shuffle(14);
         t.solve(c);
     }
 

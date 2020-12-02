@@ -72,6 +72,12 @@ public class Cube {
         }
     }
 
+    public void oneEighty(Color color) {
+        Side chosen = this.getSide(color);
+        chosen.turnClockwise();
+        chosen.turnClockwise();
+    }
+
     public Side getSide(Color color) {
         switch (color) {
             case RED:

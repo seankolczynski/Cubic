@@ -1,0 +1,40 @@
+Scramble: U F2 B2 D2 F' U F' R' L' B R'
+
+Observations: This case has 4 bad edges in positions FU, FL, BL and BD. The basic edge orientation strategy will place
+all 4 edges into an U/B side and do an U/B turn. The BU line edge is in the BR position and is oriented. The BD edge is
+in the LF position and is misoriented.
+
+EOLine: B' L' R' F2 D
+
+Explanation: The initial B' move placed the oriented BU edge into its line position. The L' R' F2 moves placed all
+misoriented edges into the D-face, and placed the misoriented BD edge into a group 1 position. The final D turn oriented
+the 4 bad edges and completed the line.
+
+Scramble: F' B' U L2 D B R2 L2 U'
+
+Observations: 8 misoriented edges, elimination in two groups of 4. Four bad edges already present in F face. DB and DF
+both in group 1 positions in B face
+
+EOLine: F D B U2 F2
+
+Explanation: The initial F turn immediately removes 4 bad edges to leave 4 remaining. The D turn positions the only
+remaining bad edge not already in the B face. The B turn orients the last 4 edges, leaving the DF and DB edges in group
+1 positions so that the line can be completed with U2 F2.
+
+Scramble: R F2 B' D' L U2 L2 D2 B
+
+Observations: 6 misoriented edges. Most likely elimination as 3 + 3 since generally more efficient. Both DF and DB edges
+are misoriented. DF edge in group 1 position, while DB edge is close to a group 1 position.
+
+EOLine: B' U2 D' L' B F2
+
+Explanation: The initial B' turn removes 3 bad edges to leave 4 remaining for elimination. The following U2 turn does two
+things: Places a bad edge and moves DF closer to its group-1 goal position. D' and L' then place 2 more bad edges into the B-face, while placing the DB edge into a group-1 position. B orients the last 4 bad edges and places the DB edge, and finally F2 places the DF edge to complete the line.
+
+Scramble: R' D F2 R B' U F' D' F2
+
+Observations: 8 edges are misoriented, so the basic orientation strategy will be to eliminate 4 edges, twice. The F-face has 3 bad edges, which is more than the B-face which has 2. The DB edge is in its correct position and oriented - also a group 1 position. The DF edge is in its correct position but misoriented - a group 2 position.
+
+EOLine: U F L B' D U B
+
+Explanation: The initial U turn fills the F-face with bad edges and F eliminates them. At this point the DF-edge is in a group 2 position, while the DB-edge is in a group 1 position. The following L-turn brings the DF-edge into a group 1 position, but now both line edges now perpendicular to each other in the D-face. For this reason a B' turn is made to move the DB edge out of the way and allow the DF-edge to be placed. Meanwhile the number and location of bad edges is unaffected. The following D and U turns place the 2 remaining bad edges, as well as the DF-edge. The final B-turn orients the last 4 bad edges and places the DB-edge.
