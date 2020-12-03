@@ -49,10 +49,10 @@ public enum Edge {
             return BU;
         }
         if (side.equals('B') && x == 0 && y == 1) {
-            return BL;
+            return BR;
         }
         if (side.equals('B') && x == 2 && y == 1) {
-            return BR;
+            return BL;
         }
         if (side.equals('U') && x == 0 && y == 1) {
             return UL;

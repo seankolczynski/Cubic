@@ -143,6 +143,190 @@ public class TestCube {
         System.out.println(c.toString());
     }
 
+    @Test
+    public void testThreeMidOneUp() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.rotate(Color.WHITE, true);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.YELLOW);
+        c.oneEighty(Color.RED);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.WHITE);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.RED);
+        c.rotate(Color.WHITE, false);
+        c.rotate(Color.BLUE, true);
+        c.rotate(Color.ORANGE, false);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.ORANGE, false);
+        c.oneEighty(Color.WHITE);
+        c.rotate(Color.RED, false);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.BLUE, true);
+        c.oneEighty(Color.RED);
+        c.oneEighty(Color.GREEN);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
+
+    @Test
+    public void testInfiniteTwo() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.RED);
+        c.rotate(Color.YELLOW, false);
+        c.oneEighty(Color.ORANGE);
+        c.rotate(Color.WHITE, true);
+        c.oneEighty(Color.RED);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.WHITE);
+        c.rotate(Color.BLUE, false);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.BLUE, false);
+        c.oneEighty(Color.GREEN);
+        c.rotate(Color.YELLOW, false);
+        c.rotate(Color.ORANGE, true);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.WHITE, false);
+        c.rotate(Color.ORANGE, false);
+        c.rotate(Color.RED, true);
+        c.rotate(Color.GREEN, true);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
+
+    @Test
+    public void testInfiniteFours() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.rotate(Color.BLUE, true);
+        c.rotate(Color.ORANGE, false);
+        c.rotate(Color.RED, true);
+        c.rotate(Color.WHITE, true);
+        c.rotate(Color.BLUE, true);
+        c.oneEighty(Color.GREEN);
+        c.rotate(Color.ORANGE, true);
+        c.rotate(Color.BLUE, true);
+        c.rotate(Color.RED, true);
+        c.oneEighty(Color.GREEN);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
+
+    @Test
+    public void testInfiniteTwo2() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.rotate(Color.WHITE, false);
+        c.oneEighty(Color.ORANGE);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.ORANGE);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.GREEN);
+        c.rotate(Color.WHITE, false);
+        c.oneEighty(Color.ORANGE);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.WHITE);
+        c.rotate(Color.RED, true);
+        c.rotate(Color.GREEN, true);
+        c.oneEighty(Color.ORANGE);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.ORANGE);
+        c.rotate(Color.RED, false);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.YELLOW);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.WHITE);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
+
+    @Test
+    public void testInfiniteTwo3() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.rotate(Color.WHITE, true);
+        c.oneEighty(Color.ORANGE);
+        c.oneEighty(Color.RED);
+        c.rotate(Color.YELLOW, false);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.YELLOW);
+        c.oneEighty(Color.ORANGE);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.BLUE, false);
+        c.oneEighty(Color.WHITE);
+        c.rotate(Color.GREEN, true);
+        c.rotate(Color.ORANGE, true);
+        c.rotate(Color.WHITE, false);
+        c.rotate(Color.ORANGE, true);
+        c.rotate(Color.WHITE, false);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.WHITE, false);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.GREEN, true);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
+
+    @Test
+    public void testAnotherInfiniteFour() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.oneEighty(Color.RED);
+        c.oneEighty(Color.YELLOW);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.RED);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.WHITE);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.RED, false);
+        c.rotate(Color.GREEN, true);
+        c.oneEighty(Color.YELLOW);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.YELLOW, false);
+        c.oneEighty(Color.GREEN);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.RED, true);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
+
+    @Test
+    public void testInfiniteTwo4() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.WHITE);
+        c.oneEighty(Color.ORANGE);
+        c.rotate(Color.WHITE, true);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.WHITE);
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.ORANGE, false);
+        c.rotate(Color.WHITE, false);
+        c.oneEighty(Color.RED);
+        c.rotate(Color.WHITE, false);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.ORANGE);
+        c.rotate(Color.WHITE, false);
+        c.rotate(Color.BLUE, false);
+        c.rotate(Color.YELLOW, true);
+        c.rotate(Color.ORANGE, false);
+        c.rotate(Color.BLUE, true);
+        System.out.println(c.toString());
+        t.solve(c);
+    }
 
 
 }
