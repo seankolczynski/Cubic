@@ -51,7 +51,7 @@ public class Thistlethwaite {
         int countBad = 1;
         ArrayList<Edge> badEdges;
         while (countBad > 0) {
-            this.translate = this.horizontalMap('F');
+            this.translate = Utils.horizontalMap('F');
             countBad = 0;
             badEdges = new ArrayList();
             for (int x = 0; x < 3; x++) {
@@ -149,10 +149,10 @@ public class Thistlethwaite {
             ArrayList<Edge> downEdges = new ArrayList<>();
             ArrayList<Edge> midEdges = new ArrayList<>();
             for (Edge e : badEdges) {
-                if (this.oneOnSide('U', e)) {
+                if (Utils.oneOnSide('U', e)) {
                     uCount++;
                     upEdges.add(e);
-                } else if (this.oneOnSide('D', e)) {
+                } else if (Utils.oneOnSide('D', e)) {
                     dCount++;
                     downEdges.add(e);
                 } else {
@@ -161,7 +161,7 @@ public class Thistlethwaite {
                 }
             }
             ArrayList<Move> moves = new ArrayList<Move>();
-            translate = horizontalMap('F');
+            translate = Utils.horizontalMap('F');
             switch(badEdges.size()) {
                 case 0:
                     //By some miracle(.05% chance) no edges are bad! Do nothing.
@@ -183,7 +183,7 @@ public class Thistlethwaite {
                         } else {
                             otherValue = upTwo.primary;
                         }
-                        translate = this.horizontalMap(faceValue);
+                        translate = Utils.horizontalMap(faceValue);
                         Character arrangement = translate.get(otherValue);
 
                         if ((faceValue == 'F' && otherValue == 'R') || (faceValue == 'R' && otherValue == 'B') || (faceValue == 'B' && otherValue == 'L') || (faceValue == 'L' && otherValue == 'F')) {
@@ -217,7 +217,7 @@ public class Thistlethwaite {
                         } else {
                             otherValue = downTwo.primary;
                         }
-                        translate = this.horizontalMap(faceValue);
+                        translate = Utils.horizontalMap(faceValue);
                         Character arrangement = translate.get(otherValue);
                         if ((faceValue == 'F' && otherValue == 'R') || (faceValue == 'R' && otherValue == 'B') || (faceValue == 'B' && otherValue == 'L') || (faceValue == 'L' && otherValue == 'F')) {
                             moves.add(Move.getMove(otherValue, Direction.Clockwise));
@@ -246,7 +246,7 @@ public class Thistlethwaite {
                             } else {
                                 matters = down.primary;
                             }
-                            if (this.shareFace(up, down)) {
+                            if (Utils.shareFace(up, down)) {
                                 moves.add(Move.uEighty);
                                 moves.add(Move.getMove(matters, Direction.OneEighty));
                             } else {
@@ -447,9 +447,9 @@ public class Thistlethwaite {
                         int additive = r.nextInt(6);
                         for (int i = 0; i < 4; i++) {
                             Edge e = badEdges.get((i + additive) % 6);
-                            if (this.oneOnSide('U', e)) {
+                            if (Utils.oneOnSide('U', e)) {
                                 upEdgesLocal.add(e);
-                            } else if (this.oneOnSide('D', e)) {
+                            } else if (Utils.oneOnSide('D', e)) {
                                 downEdgesLocal.add(e);
                             } else {
                                 midEdgesLocal.add(e);
@@ -465,9 +465,9 @@ public class Thistlethwaite {
                     int additive = r.nextInt(6);
                     for (int i = 0; i < 4; i++) {
                         Edge e = badEdges.get((i + additive) % 8);
-                        if (this.oneOnSide('U', e)) {
+                        if (Utils.oneOnSide('U', e)) {
                             upEdgesLocalEight.add(e);
-                        } else if (this.oneOnSide('D', e)) {
+                        } else if (Utils.oneOnSide('D', e)) {
                             downEdgesLocalEight.add(e);
                         } else {
                             midEdgesLocalEight.add(e);
@@ -520,45 +520,6 @@ public class Thistlethwaite {
         }
     }
 
-    private HashMap<Character,Character> horizontalMap(Character c) {
-        HashMap<Character, Character> result = new HashMap<Character, Character>();
-
-        switch(c) {
-            case 'F':
-                result.put('F', 'F');
-                result.put('R', 'R');
-                result.put('B', 'B');
-                result.put('L', 'L');
-                break;
-            case 'L':
-                result.put('F', 'L');
-                result.put('R', 'F');
-                result.put('B', 'R');
-                result.put('L', 'B');
-                break;
-            case 'B':
-                result.put('F', 'B');
-                result.put('R', 'L');
-                result.put('B', 'F');
-                result.put('L', 'R');
-                break;
-            case 'R':
-                result.put('F', 'R');
-                result.put('R', 'B');
-                result.put('B', 'L');
-                result.put('L', 'F');
-                break;
-            default:
-                result.put('F', 'F');
-                result.put('R', 'R');
-                result.put('B', 'B');
-                result.put('L', 'L');
-        }
-        result.put('U', 'U');
-        result.put('D', 'D');
-        return result;
-    }
-
     private ArrayList<Move> fourBad(ArrayList<Move> moves, ArrayList<Edge> upEdges, ArrayList<Edge> midEdges, ArrayList<Edge> downEdges) {
         int uCount = upEdges.size();
         int midCount = midEdges.size();
@@ -590,12 +551,12 @@ public class Thistlethwaite {
             } else {
                 importantFaceTwo = downTwo.primary;
             }
-            if ((!this.shareFace(upOne, downOne) && !this.shareFace(upTwo, downOne)) ||
-                    (!this.shareFace(upOne, downTwo) && !this.shareFace(upTwo, downTwo))) {
-                if (!this.shareFace(upOne, downOne) && !this.shareFace(upTwo, downOne)) {
+            if ((!Utils.shareFace(upOne, downOne) && !Utils.shareFace(upTwo, downOne)) ||
+                    (!Utils.shareFace(upOne, downTwo) && !Utils.shareFace(upTwo, downTwo))) {
+                if (!Utils.shareFace(upOne, downOne) && !Utils.shareFace(upTwo, downOne)) {
                     moves.add(Move.getMove(importantFaceOne, Direction.OneEighty));
                 }
-                if (!this.shareFace(upOne, downTwo) && !this.shareFace(upTwo, downTwo)) {
+                if (!Utils.shareFace(upOne, downTwo) && !Utils.shareFace(upTwo, downTwo)) {
                     moves.add(Move.getMove(importantFaceTwo, Direction.OneEighty));
                 }
             } else {
@@ -613,37 +574,37 @@ public class Thistlethwaite {
                 } else {
                     sharedFace = midEdges.get(0).secondary;
                 }
-                translate = this.horizontalMap(sharedFace);
-                if (this.onSide(sharedFace, upOne, upTwo)) {
-                    if (this.onSide(translate.get('L'), upOne, upTwo)) {
+                translate = Utils.horizontalMap(sharedFace);
+                if (Utils.onSide(sharedFace, upOne, upTwo)) {
+                    if (Utils.onSide(translate.get('L'), upOne, upTwo)) {
                         moves.add(Move.rClock);
                         moves.add(Move.lCounter);
                         // moves.add(Move.dCounter);
                         // moves.add(Move.bEighty);
                         moves.add(Move.bCounter);
                         moves.add(Move.uClock);
-                    } else if (this.onSide(translate.get('R'), upOne, upTwo)) {
+                    } else if (Utils.onSide(translate.get('R'), upOne, upTwo)) {
                         moves.add(Move.lCounter);
                         moves.add(Move.rClock);
                         // moves.add(Move.dClock);
                         // moves.add(Move.bEighty);
                         moves.add(Move.bClock);
                         moves.add(Move.uClock);
-                    } else if (this.onSide(translate.get('B'), upOne, upTwo)) {
+                    } else if (Utils.onSide(translate.get('B'), upOne, upTwo)) {
                         moves.add(Move.rClock);
                         moves.add(Move.lCounter);
                         moves.add(Move.uClock);
                     }
-                } else if (this.onSide(translate.get('L'), upOne, upTwo)) {
-                    if (this.onSide(translate.get('R'), upOne, upTwo)) {
+                } else if (Utils.onSide(translate.get('L'), upOne, upTwo)) {
+                    if (Utils.onSide(translate.get('R'), upOne, upTwo)) {
                         moves.add(Move.getMove(sharedFace, Direction.Random));
-                    } else if (this.onSide(translate.get('B'), upOne, upTwo)) {
+                    } else if (Utils.onSide(translate.get('B'), upOne, upTwo)) {
                         moves.add(Move.rClock);
                         moves.add(Move.fClock);
                         moves.add(Move.uClock);
                     }
-                } else if (this.onSide(translate.get('B'), upOne, upTwo)) {
-                    if (this.onSide(translate.get('R'), upOne, upTwo)) {
+                } else if (Utils.onSide(translate.get('B'), upOne, upTwo)) {
+                    if (Utils.onSide(translate.get('R'), upOne, upTwo)) {
                         moves.add(Move.rCounter);
                         moves.add(Move.fCounter);
                         moves.add(Move.uClock);
@@ -651,23 +612,23 @@ public class Thistlethwaite {
                 }
             } else {
                 Character base = null;
-                if (this.onSide(midEdges.get(0).primary, upOne, upTwo)) {
+                if (Utils.onSide(midEdges.get(0).primary, upOne, upTwo)) {
                     base = midEdges.get(0).primary;
-                } else if (this.onSide(midEdges.get(0).secondary, upOne, upTwo)) {
+                } else if (Utils.onSide(midEdges.get(0).secondary, upOne, upTwo)) {
                     base = midEdges.get(0).secondary;
-                } else if (this.onSide(midEdges.get(1).primary, upOne, upTwo)) {
+                } else if (Utils.onSide(midEdges.get(1).primary, upOne, upTwo)) {
                     base = midEdges.get(1).primary;
-                } else if (this.onSide(midEdges.get(1).secondary, upOne, upTwo)) {
+                } else if (Utils.onSide(midEdges.get(1).secondary, upOne, upTwo)) {
                     base = midEdges.get(1).secondary;
                 }
-                translate = this.horizontalMap(base);
-                if (this.onSide(translate.get('B'), upOne, upTwo)) {
+                translate = Utils.horizontalMap(base);
+                if (Utils.onSide(translate.get('B'), upOne, upTwo)) {
                     moves.add(Move.rClock);
                     moves.add(Move.lClock);
-                } else if (this.onSide(translate.get('L'), upOne, upTwo)) {
+                } else if (Utils.onSide(translate.get('L'), upOne, upTwo)) {
                     moves.add(Move.rClock);
                     moves.add(Move.bCounter);
-                } else if (this.onSide(translate.get('R'), upOne, upTwo)) {
+                } else if (Utils.onSide(translate.get('R'), upOne, upTwo)) {
                     moves.add(Move.lClock);
                     moves.add(Move.uClock);
                     moves.add(Move.rClock);
@@ -685,37 +646,37 @@ public class Thistlethwaite {
                 } else {
                     sharedFace = midEdges.get(0).secondary;
                 }
-                translate = this.horizontalMap(sharedFace);
-                if (this.onSide(sharedFace, downOne, downTwo)) {
-                    if (this.onSide(translate.get('L'), downOne, downTwo)) {
+                translate = Utils.horizontalMap(sharedFace);
+                if (Utils.onSide(sharedFace, downOne, downTwo)) {
+                    if (Utils.onSide(translate.get('L'), downOne, downTwo)) {
                         moves.add(Move.rCounter);
                         moves.add(Move.lClock);
                         // moves.add(Move.dClock);
                         // moves.add(Move.bEighty);
                         moves.add(Move.bClock);
                         moves.add(Move.dCounter);
-                    } else if (this.onSide(translate.get('R'), downOne, downTwo)) {
+                    } else if (Utils.onSide(translate.get('R'), downOne, downTwo)) {
                         moves.add(Move.lClock);
                         moves.add(Move.rClock);
                         // moves.add(Move.dCounter);
                         // moves.add(Move.bEighty);
                         moves.add(Move.bCounter);
                         moves.add(Move.dCounter);
-                    } else if (this.onSide(translate.get('B'), downOne, downTwo)) {
+                    } else if (Utils.onSide(translate.get('B'), downOne, downTwo)) {
                         moves.add(Move.rCounter);
                         moves.add(Move.lClock);
                         moves.add(Move.dCounter);
                     }
-                } else if (this.onSide(translate.get('L'), downOne, downTwo)) {
-                    if (this.onSide(translate.get('R'), downOne, downTwo)) {
+                } else if (Utils.onSide(translate.get('L'), downOne, downTwo)) {
+                    if (Utils.onSide(translate.get('R'), downOne, downTwo)) {
                         moves.add(Move.getMove(sharedFace, Direction.Random));
-                    } else if (this.onSide(translate.get('B'), downOne, downTwo)) {
+                    } else if (Utils.onSide(translate.get('B'), downOne, downTwo)) {
                         moves.add(Move.rCounter);
                         moves.add(Move.fCounter);
                         moves.add(Move.dCounter);
                     }
-                } else if (this.onSide(translate.get('B'), downOne, downTwo)) {
-                    if (this.onSide(translate.get('R'), downOne, downTwo)) {
+                } else if (Utils.onSide(translate.get('B'), downOne, downTwo)) {
+                    if (Utils.onSide(translate.get('R'), downOne, downTwo)) {
                         moves.add(Move.lClock);
                         moves.add(Move.uClock);
                         moves.add(Move.dCounter);
@@ -723,23 +684,23 @@ public class Thistlethwaite {
                 }
             } else {
                 Character base = null;
-                if (this.onSide(midEdges.get(0).primary, downOne, downTwo)) {
+                if (Utils.onSide(midEdges.get(0).primary, downOne, downTwo)) {
                     base = midEdges.get(0).primary;
-                } else if (this.onSide(midEdges.get(0).secondary, downOne, downTwo)) {
+                } else if (Utils.onSide(midEdges.get(0).secondary, downOne, downTwo)) {
                     base = midEdges.get(0).secondary;
-                } else if (this.onSide(midEdges.get(1).primary, downOne, downTwo)) {
+                } else if (Utils.onSide(midEdges.get(1).primary, downOne, downTwo)) {
                     base = midEdges.get(1).primary;
-                } else if (this.onSide(midEdges.get(1).secondary, downOne, downTwo)) {
+                } else if (Utils.onSide(midEdges.get(1).secondary, downOne, downTwo)) {
                     base = midEdges.get(1).secondary;
                 }
-                translate = this.horizontalMap(base);
-                if (this.onSide(translate.get('B'), downOne, downTwo)) {
+                translate = Utils.horizontalMap(base);
+                if (Utils.onSide(translate.get('B'), downOne, downTwo)) {
                     moves.add(Move.rCounter);
                     moves.add(Move.lCounter);
-                } else if (this.onSide(translate.get('L'), downOne, downTwo)) {
+                } else if (Utils.onSide(translate.get('L'), downOne, downTwo)) {
                     moves.add(Move.rCounter);
                     moves.add(Move.bClock);
-                } else if (this.onSide(translate.get('R'), downOne, downTwo)) {
+                } else if (Utils.onSide(translate.get('R'), downOne, downTwo)) {
                     moves.add(Move.lCounter);
                     moves.add(Move.uCounter);
                     moves.add(Move.rCounter);
@@ -757,7 +718,7 @@ public class Thistlethwaite {
                 } else {
                     sharedFace = midEdges.get(0).secondary;
                 }
-                translate = this.horizontalMap(sharedFace);
+                translate = Utils.horizontalMap(sharedFace);
                 if (sharedFace.equals(upOne.primary) || sharedFace.equals(upOne.secondary)) {
                     if (sharedFace.equals(downOne.primary) || sharedFace.equals(downOne.secondary)) {
                         moves.add(Move.rClock);
@@ -813,13 +774,13 @@ public class Thistlethwaite {
             Edge mid = midEdges.get(0);
             Edge upOne = upEdges.get(0);
             Edge upTwo = upEdges.get(1);
-            if (this.onSide(mid.primary, upOne, upTwo)) {
-                if (this.onSide(mid.secondary, upOne, upTwo)) {
+            if (Utils.onSide(mid.primary, upOne, upTwo)) {
+                if (Utils.onSide(mid.secondary, upOne, upTwo)) {
                     moves.add(Move.uClock);
                 } else {
                     moves.add(Move.getMove(mid.secondary, Direction.Clockwise));
                 }
-            } else if (this.onSide(mid.secondary, upOne, upTwo)) {
+            } else if (Utils.onSide(mid.secondary, upOne, upTwo)) {
                 moves.add(Move.getMove(mid.primary, Direction.Counterclockwise));
             } else {
                 switch (mid) {
@@ -842,7 +803,7 @@ public class Thistlethwaite {
             Edge upOne = upEdges.get(0);
             Edge upTwo = upEdges.get(1);
             Edge upThree = upEdges.get(2);
-            if (this.onSide(mid.primary, upOne, upTwo) || this.oneOnSide(mid.primary, upThree)) {
+            if (Utils.onSide(mid.primary, upOne, upTwo) || Utils.oneOnSide(mid.primary, upThree)) {
                 moves.add(Move.uClock);
             } else {
                 moves.add(Move.getMove(mid.primary, Direction.Clockwise));
@@ -852,13 +813,13 @@ public class Thistlethwaite {
             Edge mid = midEdges.get(0);
             Edge downOne = downEdges.get(0);
             Edge downTwo = downEdges.get(1);
-            if (this.onSide(mid.primary, downOne, downTwo)) {
-                if (this.onSide(mid.secondary, downOne, downTwo)) {
+            if (Utils.onSide(mid.primary, downOne, downTwo)) {
+                if (Utils.onSide(mid.secondary, downOne, downTwo)) {
                     moves.add(Move.dClock);
                 } else {
                     moves.add(Move.getMove(mid.secondary, Direction.Counterclockwise));
                 }
-            } else if (this.onSide(mid.secondary, downOne, downTwo)) {
+            } else if (Utils.onSide(mid.secondary, downOne, downTwo)) {
                 moves.add(Move.getMove(mid.primary, Direction.Clockwise));
             } else {
                 switch (mid) {
@@ -881,7 +842,7 @@ public class Thistlethwaite {
             Edge downOne = downEdges.get(0);
             Edge downTwo = downEdges.get(1);
             Edge downThree = downEdges.get(2);
-            if (this.onSide(mid.primary, downOne, downTwo) || this.oneOnSide(mid.primary, downThree)) {
+            if (Utils.onSide(mid.primary, downOne, downTwo) || Utils.oneOnSide(mid.primary, downThree)) {
                 moves.add(Move.dClock);
             } else {
                 moves.add(Move.getMove(mid.primary, Direction.Counterclockwise));
@@ -947,7 +908,7 @@ public class Thistlethwaite {
             Edge upTwo = upEdges.get(1);
             Edge upThree = upEdges.get(2);
             Edge downOne = downEdges.get(0);
-            if (this.onSide(downOne.primary, upOne, upTwo) || this.onSide(downOne.secondary, upOne, upTwo) || this.oneOnSide(downOne.primary, upThree) || this.oneOnSide(downOne.secondary, upThree)) {
+            if (Utils.onSide(downOne.primary, upOne, upTwo) || Utils.onSide(downOne.secondary, upOne, upTwo) || Utils.oneOnSide(downOne.primary, upThree) || Utils.oneOnSide(downOne.secondary, upThree)) {
                 moves.add(Move.uClock);
             } else {
                 Character downturn;
@@ -964,7 +925,7 @@ public class Thistlethwaite {
             Edge downTwo = downEdges.get(1);
             Edge downThree = downEdges.get(2);
             Edge upOne = upEdges.get(0);
-            if (this.onSide(upOne.primary, downOne, downTwo) || this.onSide(upOne.secondary, downOne, downTwo) || this.oneOnSide(upOne.primary, downThree) || this.oneOnSide(upOne.secondary, downThree)) {
+            if (Utils.onSide(upOne.primary, downOne, downTwo) || Utils.onSide(upOne.secondary, downOne, downTwo) || Utils.oneOnSide(upOne.primary, downThree) || Utils.oneOnSide(upOne.secondary, downThree)) {
                 moves.add(Move.dClock);
             } else {
                 Character upturn;
@@ -980,17 +941,7 @@ public class Thistlethwaite {
         return moves;
     }
 
-    private boolean onSide(Character c, Edge one, Edge two) {
-        return c.equals(one.primary) || c.equals(one.secondary) || c.equals(two.primary) || c.equals(two.secondary);
-    }
 
-    private boolean oneOnSide(Character c,Edge e) {
-        return c.equals(e.primary) || c.equals(e.secondary);
-    }
-
-    private boolean shareFace(Edge one, Edge  two) {
-        return one.primary.equals(two.primary) || one.primary.equals(two.secondary) || one.secondary.equals(two.primary) || one.secondary.equals(two.secondary);
-    }
 
     private void translateAndExecute(HashMap<Character, Character> map, List<Move> moves) {
         for (Move move : moves) {
@@ -1060,10 +1011,10 @@ public class Thistlethwaite {
         ArrayList<Edge> downEdges = new ArrayList<>();
         ArrayList<Edge> midEdges = new ArrayList<>();
         for (Edge e : fronts) {
-            if (this.oneOnSide('U', e)) {
+            if (Utils.oneOnSide('U', e)) {
                 uCount++;
                 upEdges.add(e);
-            } else if (this.oneOnSide('D', e)) {
+            } else if (Utils.oneOnSide('D', e)) {
                 dCount++;
                 downEdges.add(e);
             } else {
@@ -1097,13 +1048,13 @@ public class Thistlethwaite {
                 Edge upOne = upEdges.get(0);
                 Edge upTwo = upEdges.get(1);
                 Edge upThree = upEdges.get(2);
-                middles.remove(this.notUpOrDown(upOne));
-                middles.remove(this.notUpOrDown(upTwo));
-                middles.remove(this.notUpOrDown(upThree));
+                middles.remove(Utils.notUpOrDown(upOne));
+                middles.remove(Utils.notUpOrDown(upTwo));
+                middles.remove(Utils.notUpOrDown(upThree));
                 if (dCount == 1) {
                     Edge down = downEdges.get(0);
-                    Character main = this.notUpOrDown(down);
-                    translate = this.horizontalMap(main);
+                    Character main = Utils.notUpOrDown(down);
+                    translate = Utils.horizontalMap(main);
                     Character other = translate.get(middles.get(0));
                     switch (other) {
                         case 'R':
@@ -1123,30 +1074,74 @@ public class Thistlethwaite {
                 } else if (midCount == 1) {
                     Edge mid = midEdges.get(0);
                     Character main = mid.primary;
-                    translate = this.horizontalMap(main);
-                    Character other = translate.get(middles.get(0));
-                    if ((mid.equals(Edge.FL) && other.equals()))
-
-
-                    
-                    switch (other) {
-                        case 'R':
-                            moves.add(Move.rCounter);
+                    Character other = middles.get(0);
+                    switch (mid) {
+                        case FR:
+                            if (other.equals('F')) {
+                                moves.add(Move.fCounter);
+                                notDone = false;
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.rClock);
+                                notDone = false;
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.uClock);
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.uCounter);
+                            }
                             break;
-                        case 'L':
-                            moves.add(Move.uEighty);
-                            moves.add(Move.rCounter);
+                        case FL:
+                            if (other.equals('F')) {
+                                moves.add(Move.fClock);
+                                notDone = false;
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.uClock);
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.uCounter);
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.lCounter);
+                                notDone = false;
+                            }
                             break;
-                        case 'B':
-                            moves.add(Move.uClock);
-                            moves.add(Move.rCounter);
+                        case BL:
+                            if (other.equals('F')) {
+                                moves.add(Move.uClock);
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.uCounter);
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.bCounter);
+                                notDone = false;
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.lClock);
+                                notDone = false;
+                            }
                             break;
-                        case 'F':
-                            moves.add(Move.getMove(main, Direction.Clockwise));
-                            notDone = !notDone;
+                        case BR:
+                            if (other.equals('F')) {
+                                moves.add(Move.uCounter);
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.rCounter);
+                                notDone = false;
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.bClock);
+                                notDone = false;
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.uClock);
+                            }
                             break;
+                            }
                     }
-                }
             } else if (dCount == 3) {
                 ArrayList<Character> middles = new ArrayList();
                 middles.add('F');
@@ -1156,13 +1151,13 @@ public class Thistlethwaite {
                 Edge downOne = downEdges.get(0);
                 Edge downTwo = downEdges.get(1);
                 Edge downThree = downEdges.get(2);
-                middles.remove(this.notUpOrDown(downOne));
-                middles.remove(this.notUpOrDown(downTwo));
-                middles.remove(this.notUpOrDown(downThree));
+                middles.remove(Utils.notUpOrDown(downOne));
+                middles.remove(Utils.notUpOrDown(downTwo));
+                middles.remove(Utils.notUpOrDown(downThree));
                 if (uCount == 1) {
                     Edge up = downEdges.get(0);
-                    Character main = this.notUpOrDown(up);
-                    translate = this.horizontalMap(main);
+                    Character main = Utils.notUpOrDown(up);
+                    translate = Utils.horizontalMap(main);
                     Character other = translate.get(middles.get(0));
                     switch (other) {
                         case 'R':
@@ -1182,23 +1177,71 @@ public class Thistlethwaite {
                 } else if (midCount == 1) {
                     Edge mid = midEdges.get(0);
                     Character main = mid.primary;
-                    translate = this.horizontalMap(main);
-                    Character other = translate.get(middles.get(0));
-                    switch (other) {
-                        case 'R':
-                            moves.add(Move.rClock);
+                    Character other = middles.get(0);
+                    switch (mid) {
+                        case FR:
+                            if (other.equals('F')) {
+                                moves.add(Move.fClock);
+                                notDone = false;
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.rCounter);
+                                notDone = false;
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.dCounter);
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.dClock);
+                            }
                             break;
-                        case 'L':
-                            moves.add(Move.dEighty);
-                            moves.add(Move.rClock);
+                        case FL:
+                            if (other.equals('F')) {
+                                moves.add(Move.fCounter);
+                                notDone = false;
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.dCounter);
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.dClock);
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.lClock);
+                                notDone = false;
+                            }
                             break;
-                        case 'B':
-                            moves.add(Move.dCounter);
-                            moves.add(Move.rClock);
+                        case BL:
+                            if (other.equals('F')) {
+                                moves.add(Move.dCounter);
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.dClock);
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.bClock);
+                                notDone = false;
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.lCounter);
+                                notDone = false;
+                            }
                             break;
-                        case 'F':
-                            moves.add(Move.getMove(main, Direction.Counterclockwise));
-                            notDone = !notDone;
+                        case BR:
+                            if (other.equals('F')) {
+                                moves.add(Move.dClock);
+                            }
+                            else if (other.equals('R')) {
+                                moves.add(Move.rClock);
+                                notDone = false;
+                            }
+                            else if (other.equals('B')) {
+                                moves.add(Move.bCounter);
+                                notDone = false;
+                            }
+                            else if (other.equals('L')) {
+                                moves.add(Move.dCounter);
+                            }
                             break;
                     }
                 }
@@ -1207,10 +1250,10 @@ public class Thistlethwaite {
                 Edge upTwo = upEdges.get(1);
                 Edge downOne = downEdges.get(0);
                 Edge downTwo =downEdges.get(1);
-                Character upOneFace = this.notUpOrDown(upOne);
-                Character upTwoFace = this.notUpOrDown(upTwo);
-                if (this.onSide(upOneFace, downOne, downTwo)) {
-                    if (this.onSide(upTwoFace, downOne, downTwo)) {
+                Character upOneFace = Utils.notUpOrDown(upOne);
+                Character upTwoFace = Utils.notUpOrDown(upTwo);
+                if (Utils.onSide(upOneFace, downOne, downTwo)) {
+                    if (Utils.onSide(upTwoFace, downOne, downTwo)) {
                         moves.add(Move.dRandom);
                     } else {
                         moves.add(Move.getMove(upTwoFace, Direction.OneEighty));
@@ -1222,8 +1265,8 @@ public class Thistlethwaite {
                 Edge upOne = upEdges.get(0);
                 Edge upTwo = upEdges.get(1);
                 Edge downOne = downEdges.get(0);
-                Character downOneFace = this.notUpOrDown(downOne);
-                if (this.onSide(downOneFace, upOne, upTwo)) {
+                Character downOneFace = Utils.notUpOrDown(downOne);
+                if (Utils.onSide(downOneFace, upOne, upTwo)) {
                     moves.add(Move.dClock);
                 } else {
                     moves.add(Move.getMove(downOneFace, Direction.OneEighty));
@@ -1232,8 +1275,8 @@ public class Thistlethwaite {
                 Edge downOne = downEdges.get(0);
                 Edge downTwo = downEdges.get(1);
                 Edge upOne = upEdges.get(0);
-                Character upOneFace = this.notUpOrDown(upOne);
-                if (this.onSide(upOneFace, downOne, downTwo)) {
+                Character upOneFace = Utils.notUpOrDown(upOne);
+                if (Utils.onSide(upOneFace, downOne, downTwo)) {
                     moves.add(Move.uClock);
                 } else {
                     moves.add(Move.getMove(upOneFace, Direction.OneEighty));
@@ -1244,16 +1287,16 @@ public class Thistlethwaite {
                 Edge midThree = midEdges.get(2);
                 if (uCount == 1) {
                     Edge up = upEdges.get(0);
-                    Character valuedSide = this.notUpOrDown(up);
-                    translate = this.horizontalMap(valuedSide);
-                    if (this.onSide(valuedSide, midOne, midTwo) || this.onSide(valuedSide, midTwo, midThree) || this.onSide(valuedSide, midOne, midThree)) {
+                    Character valuedSide = Utils.notUpOrDown(up);
+                    translate = Utils.horizontalMap(valuedSide);
+                    if (Utils.onSide(valuedSide, midOne, midTwo) || Utils.onSide(valuedSide, midTwo, midThree) || Utils.onSide(valuedSide, midOne, midThree)) {
                         moves.add(Move.uEighty);
                     } else {
-                        if (this.oneOnSide(valuedSide, midOne)) {
+                        if (Utils.oneOnSide(valuedSide, midOne)) {
                             moves = this.threeMidHelperUp(moves, valuedSide, midOne, up);
-                        } else if (this.oneOnSide(valuedSide, midTwo)) {
+                        } else if (Utils.oneOnSide(valuedSide, midTwo)) {
                             moves = this.threeMidHelperUp(moves, valuedSide, midTwo, up);
-                        } else if (this.oneOnSide(valuedSide, midThree)) {
+                        } else if (Utils.oneOnSide(valuedSide, midThree)) {
                             moves = this.threeMidHelperUp(moves, valuedSide, midThree, up);
                         }
                     }
@@ -1261,20 +1304,30 @@ public class Thistlethwaite {
                 }
                 else if (dCount == 1) {
                     Edge down = downEdges.get(0);
-                    Character valuedSide = this.notUpOrDown(down);
-                    translate = this.horizontalMap(valuedSide);
-                    if (this.onSide(valuedSide, midOne, midTwo) || this.onSide(valuedSide, midTwo, midThree) || this.onSide(valuedSide, midOne, midThree)) {
+                    Character valuedSide = Utils.notUpOrDown(down);
+                    translate = Utils.horizontalMap(valuedSide);
+                    if (Utils.onSide(valuedSide, midOne, midTwo) || Utils.onSide(valuedSide, midTwo, midThree) || Utils.onSide(valuedSide, midOne, midThree)) {
                         moves.add(Move.uEighty);
                     } else {
-                        if (this.oneOnSide(valuedSide, midOne)) {
-                            moves = this.threeMidHelperUp(moves, valuedSide, midOne, down);
-                        } else if (this.oneOnSide(valuedSide, midTwo)) {
-                            moves = this.threeMidHelperUp(moves, valuedSide, midTwo, down);
-                        } else if (this.oneOnSide(valuedSide, midThree)) {
-                            moves = this.threeMidHelperUp(moves, valuedSide, midThree, down);
+                        if (Utils.oneOnSide(valuedSide, midOne)) {
+                            moves = this.threeMidHelperDown(moves, valuedSide, midOne, down);
+                        } else if (Utils.oneOnSide(valuedSide, midTwo)) {
+                            moves = this.threeMidHelperDown(moves, valuedSide, midTwo, down);
+                        } else if (Utils.oneOnSide(valuedSide, midThree)) {
+                            moves = this.threeMidHelperDown(moves, valuedSide, midThree, down);
                         }
                         notDone = !notDone;
                     }
+                } else if (midCount == 2) {
+                    if (uCount == 1 && dCount == 1) {
+                        Edge up = upEdges.get(0);
+                        Edge down = downEdges.get(0);
+                        if (Utils.shareFace(up, down)) {
+                            
+                        }
+
+                    }
+
                 }
             }
             this.translateAndExecute(translate, moves);
@@ -1284,7 +1337,7 @@ public class Thistlethwaite {
     }
 
     private ArrayList<Move> threeMidHelperUp(ArrayList<Move> moves, Character valuedSide, Edge mid, Edge up) {
-        if (this.oneOnSide(valuedSide, mid)) {
+        if (Utils.oneOnSide(valuedSide, mid)) {
             if ((up.equals(Edge.FU) && mid.equals(Edge.FR)) || (up.equals(Edge.UR) && mid.equals(Edge.BR)) || (up.equals(Edge.BU) && mid.equals(Edge.BL)) || (up.equals(Edge.UL) && mid.equals(Edge.FL))) {
                 moves.add(Move.getMove(translate.get('R'), Direction.Clockwise));
                 moves.add(Move.getMove(translate.get('F'), Direction.Counterclockwise));
@@ -1299,7 +1352,7 @@ public class Thistlethwaite {
     }
 
     private ArrayList<Move> threeMidHelperDown(ArrayList<Move> moves, Character valuedSide, Edge mid, Edge down) {
-        if (this.oneOnSide(valuedSide, mid)) {
+        if (Utils.oneOnSide(valuedSide, mid)) {
             if ((down.equals(Edge.FD) && mid.equals(Edge.FL)) || (down.equals(Edge.DR) && mid.equals(Edge.FR)) || (down.equals(Edge.BD) && mid.equals(Edge.BR)) || (down.equals(Edge.DL) && mid.equals(Edge.BL))) {
                 moves.add(Move.getMove(translate.get('L'), Direction.Counterclockwise));
                 moves.add(Move.getMove(translate.get('F'), Direction.Counterclockwise));
@@ -1313,13 +1366,7 @@ public class Thistlethwaite {
         return moves;
     }
 
-    private Character notUpOrDown(Edge e) {
-        if (e.primary == 'U' || e.primary == 'D') {
-            return e.secondary;
-        } else {
-            return e.primary;
-        }
-    }
+
 
 
 

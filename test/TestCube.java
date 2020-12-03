@@ -328,5 +328,34 @@ public class TestCube {
         t.solve(c);
     }
 
+    @Test
+    public void testPhaseTwo() {
+        Thistlethwaite t = new Thistlethwaite();
+        Cube c = new Cube();
+        c.oneEighty(Color.BLUE);
+        c.rotate(Color.YELLOW, true);
+        c.oneEighty(Color.RED);
+        c.oneEighty(Color.BLUE);
+        c.oneEighty(Color.ORANGE);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.WHITE, true);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.YELLOW);
+        c.rotate(Color.RED, false);
+        c.rotate(Color.GREEN, false);
+        c.oneEighty(Color.YELLOW);
+        c.oneEighty(Color.GREEN);
+        c.oneEighty(Color.WHITE);
+        c.oneEighty(Color.ORANGE);
+        c.rotate(Color.GREEN, false);
+        c.rotate(Color.RED, false);
+        c.rotate(Color.BLUE, true);
+        c.rotate(Color.GREEN, false);
+        System.out.println(c.toString());
+        t.solve(c);
+
+    }
+
 
 }
