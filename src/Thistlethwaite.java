@@ -20,6 +20,7 @@ public class Thistlethwaite {
         this.cube = cube;
         colorToFace = this.pairSides();
         this.phaseOne();
+        this.phaseTwo();
 
         return cube;
     }
@@ -635,7 +636,7 @@ public class Thistlethwaite {
                     }
                 } else if (this.onSide(translate.get('L'), upOne, upTwo)) {
                     if (this.onSide(translate.get('R'), upOne, upTwo)) {
-                        moves.add(Move.uClock);
+                        moves.add(Move.getMove(sharedFace, Direction.Random));
                     } else if (this.onSide(translate.get('B'), upOne, upTwo)) {
                         moves.add(Move.rClock);
                         moves.add(Move.fClock);
@@ -707,7 +708,7 @@ public class Thistlethwaite {
                     }
                 } else if (this.onSide(translate.get('L'), downOne, downTwo)) {
                     if (this.onSide(translate.get('R'), downOne, downTwo)) {
-                        moves.add(Move.dCounter);
+                        moves.add(Move.getMove(sharedFace, Direction.Random));
                     } else if (this.onSide(translate.get('B'), downOne, downTwo)) {
                         moves.add(Move.rCounter);
                         moves.add(Move.fCounter);
@@ -1012,6 +1013,312 @@ public class Thistlethwaite {
             }
         }
 
+    }
+
+    private void phaseTwo() {
+        Side frontFace = this.cube.getSide(this.colorToFace.get('F'));
+        Side backFace = this.cube.getSide(this.colorToFace.get('B'));
+        Side rightFace = this.cube.getSide(this.colorToFace.get('R'));
+        Side leftFace = this.cube.getSide(this.colorToFace.get('L'));
+        Side upFace = this.cube.getSide(this.colorToFace.get('U'));
+        Side downFace = this.cube.getSide(this.colorToFace.get('D'));
+        ArrayList<Edge> fronts = new ArrayList<>();
+
+       for (Edge e: Edge.values()) {
+           switch (e) {
+               case FU:
+                   if (frontFace.squares[1][2] == 'F' || upFace.squares[1][0] == 'F') {fronts.add(e);} break;
+               case FD:
+                   if (frontFace.squares[1][0] == 'F' || downFace.squares[1][2] == 'F') {fronts.add(e);} break;
+               case FR:
+                   if (frontFace.squares[2][1] == 'F' || rightFace.squares[0][1] == 'F') {fronts.add(e);} break;
+               case FL:
+                   if (frontFace.squares[0][1] == 'F' || leftFace.squares[2][1] == 'F') {fronts.add(e);} break;
+               case BU:
+                   if (backFace.squares[1][2] == 'F' || upFace.squares[1][2] == 'F') {fronts.add(e);} break;
+               case BD:
+                   if (backFace.squares[1][0] == 'F' || downFace.squares[1][0] == 'F') {fronts.add(e);} break;
+               case BR:
+                   if (backFace.squares[0][1] == 'F' || rightFace.squares[2][1] == 'F') {fronts.add(e);} break;
+               case BL:
+                   if (backFace.squares[2][1] == 'F' || leftFace.squares[0][1] == 'F') {fronts.add(e);} break;
+               case UR:
+                   if (upFace.squares[2][1] == 'F' || rightFace.squares[1][2] == 'F') {fronts.add(e);} break;
+               case UL:
+                   if (upFace.squares[0][1] == 'F' || leftFace.squares[1][2] == 'F') {fronts.add(e);} break;
+               case DR:
+                   if (downFace.squares[2][1] == 'F' || rightFace.squares[1][0] == 'F') {fronts.add(e);} break;
+               case DL:
+                   if (downFace.squares[0][1] == 'F' || leftFace.squares[1][0] == 'F') {fronts.add(e);} break;
+           }
+       }
+
+        int uCount = 0;
+        int dCount= 0;
+        int midCount = 0;
+        ArrayList<Edge> upEdges = new ArrayList<>();
+        ArrayList<Edge> downEdges = new ArrayList<>();
+        ArrayList<Edge> midEdges = new ArrayList<>();
+        for (Edge e : fronts) {
+            if (this.oneOnSide('U', e)) {
+                uCount++;
+                upEdges.add(e);
+            } else if (this.oneOnSide('D', e)) {
+                dCount++;
+                downEdges.add(e);
+            } else {
+                midCount++;
+                midEdges.add(e);
+            }
+        }
+        boolean notDone = true;
+        while (notDone) {
+            ArrayList<Move> moves = new ArrayList<Move>();
+            if (uCount == 4) {
+                moves.add(Move.fEighty);
+                moves.add(Move.dEighty);
+                moves.add(Move.rClock);
+                moves.add(Move.lCounter);
+                moves.add(Move.bClock);
+                notDone = false;
+            } else if (dCount == 4) {
+                moves.add(Move.fEighty);
+                moves.add(Move.dEighty);
+                moves.add(Move.lClock);
+                moves.add(Move.rCounter);
+                moves.add(Move.fClock);
+                notDone = !notDone;
+            } else if (uCount == 3) {
+                ArrayList<Character> middles = new ArrayList();
+                middles.add('F');
+                middles.add('R');
+                middles.add('B');
+                middles.add('L');
+                Edge upOne = upEdges.get(0);
+                Edge upTwo = upEdges.get(1);
+                Edge upThree = upEdges.get(2);
+                middles.remove(this.notUpOrDown(upOne));
+                middles.remove(this.notUpOrDown(upTwo));
+                middles.remove(this.notUpOrDown(upThree));
+                if (dCount == 1) {
+                    Edge down = downEdges.get(0);
+                    Character main = this.notUpOrDown(down);
+                    translate = this.horizontalMap(main);
+                    Character other = translate.get(middles.get(0));
+                    switch (other) {
+                        case 'R':
+                            moves.add(Move.uClock);
+                            break;
+                        case 'L':
+                            moves.add(Move.uCounter);
+                            break;
+                        case 'B':
+                            moves.add(Move.uEighty);
+                            break;
+                    }
+                    moves.add(Move.rClock);
+                    moves.add(Move.lCounter);
+                    moves.add(Move.fClock);
+                    notDone = !notDone;
+                } else if (midCount == 1) {
+                    Edge mid = midEdges.get(0);
+                    Character main = mid.primary;
+                    translate = this.horizontalMap(main);
+                    Character other = translate.get(middles.get(0));
+                    if ((mid.equals(Edge.FL) && other.equals()))
+
+
+                    
+                    switch (other) {
+                        case 'R':
+                            moves.add(Move.rCounter);
+                            break;
+                        case 'L':
+                            moves.add(Move.uEighty);
+                            moves.add(Move.rCounter);
+                            break;
+                        case 'B':
+                            moves.add(Move.uClock);
+                            moves.add(Move.rCounter);
+                            break;
+                        case 'F':
+                            moves.add(Move.getMove(main, Direction.Clockwise));
+                            notDone = !notDone;
+                            break;
+                    }
+                }
+            } else if (dCount == 3) {
+                ArrayList<Character> middles = new ArrayList();
+                middles.add('F');
+                middles.add('R');
+                middles.add('B');
+                middles.add('L');
+                Edge downOne = downEdges.get(0);
+                Edge downTwo = downEdges.get(1);
+                Edge downThree = downEdges.get(2);
+                middles.remove(this.notUpOrDown(downOne));
+                middles.remove(this.notUpOrDown(downTwo));
+                middles.remove(this.notUpOrDown(downThree));
+                if (uCount == 1) {
+                    Edge up = downEdges.get(0);
+                    Character main = this.notUpOrDown(up);
+                    translate = this.horizontalMap(main);
+                    Character other = translate.get(middles.get(0));
+                    switch (other) {
+                        case 'R':
+                            moves.add(Move.dCounter);
+                            break;
+                        case 'L':
+                            moves.add(Move.dClock);
+                            break;
+                        case 'B':
+                            moves.add(Move.dEighty);
+                            break;
+                    }
+                    moves.add(Move.rCounter);
+                    moves.add(Move.lClock);
+                    moves.add(Move.fClock);
+                    notDone = !notDone;
+                } else if (midCount == 1) {
+                    Edge mid = midEdges.get(0);
+                    Character main = mid.primary;
+                    translate = this.horizontalMap(main);
+                    Character other = translate.get(middles.get(0));
+                    switch (other) {
+                        case 'R':
+                            moves.add(Move.rClock);
+                            break;
+                        case 'L':
+                            moves.add(Move.dEighty);
+                            moves.add(Move.rClock);
+                            break;
+                        case 'B':
+                            moves.add(Move.dCounter);
+                            moves.add(Move.rClock);
+                            break;
+                        case 'F':
+                            moves.add(Move.getMove(main, Direction.Counterclockwise));
+                            notDone = !notDone;
+                            break;
+                    }
+                }
+            } else if (uCount == 2 && dCount == 2) {
+                Edge upOne = upEdges.get(0);
+                Edge upTwo = upEdges.get(1);
+                Edge downOne = downEdges.get(0);
+                Edge downTwo =downEdges.get(1);
+                Character upOneFace = this.notUpOrDown(upOne);
+                Character upTwoFace = this.notUpOrDown(upTwo);
+                if (this.onSide(upOneFace, downOne, downTwo)) {
+                    if (this.onSide(upTwoFace, downOne, downTwo)) {
+                        moves.add(Move.dRandom);
+                    } else {
+                        moves.add(Move.getMove(upTwoFace, Direction.OneEighty));
+                    }
+                } else {
+                    moves.add(Move.getMove(upOneFace, Direction.OneEighty));
+                }
+            } else if (uCount == 2 && dCount == 1 && midCount == 1) {
+                Edge upOne = upEdges.get(0);
+                Edge upTwo = upEdges.get(1);
+                Edge downOne = downEdges.get(0);
+                Character downOneFace = this.notUpOrDown(downOne);
+                if (this.onSide(downOneFace, upOne, upTwo)) {
+                    moves.add(Move.dClock);
+                } else {
+                    moves.add(Move.getMove(downOneFace, Direction.OneEighty));
+                }
+            } else if (dCount == 2 && uCount == 1 && midCount == 1) {
+                Edge downOne = downEdges.get(0);
+                Edge downTwo = downEdges.get(1);
+                Edge upOne = upEdges.get(0);
+                Character upOneFace = this.notUpOrDown(upOne);
+                if (this.onSide(upOneFace, downOne, downTwo)) {
+                    moves.add(Move.uClock);
+                } else {
+                    moves.add(Move.getMove(upOneFace, Direction.OneEighty));
+                }
+            } else if (midCount == 3) {
+                Edge midOne = midEdges.get(0);
+                Edge midTwo = midEdges.get(1);
+                Edge midThree = midEdges.get(2);
+                if (uCount == 1) {
+                    Edge up = upEdges.get(0);
+                    Character valuedSide = this.notUpOrDown(up);
+                    translate = this.horizontalMap(valuedSide);
+                    if (this.onSide(valuedSide, midOne, midTwo) || this.onSide(valuedSide, midTwo, midThree) || this.onSide(valuedSide, midOne, midThree)) {
+                        moves.add(Move.uEighty);
+                    } else {
+                        if (this.oneOnSide(valuedSide, midOne)) {
+                            moves = this.threeMidHelperUp(moves, valuedSide, midOne, up);
+                        } else if (this.oneOnSide(valuedSide, midTwo)) {
+                            moves = this.threeMidHelperUp(moves, valuedSide, midTwo, up);
+                        } else if (this.oneOnSide(valuedSide, midThree)) {
+                            moves = this.threeMidHelperUp(moves, valuedSide, midThree, up);
+                        }
+                    }
+                    notDone = !notDone;
+                }
+                else if (dCount == 1) {
+                    Edge down = downEdges.get(0);
+                    Character valuedSide = this.notUpOrDown(down);
+                    translate = this.horizontalMap(valuedSide);
+                    if (this.onSide(valuedSide, midOne, midTwo) || this.onSide(valuedSide, midTwo, midThree) || this.onSide(valuedSide, midOne, midThree)) {
+                        moves.add(Move.uEighty);
+                    } else {
+                        if (this.oneOnSide(valuedSide, midOne)) {
+                            moves = this.threeMidHelperUp(moves, valuedSide, midOne, down);
+                        } else if (this.oneOnSide(valuedSide, midTwo)) {
+                            moves = this.threeMidHelperUp(moves, valuedSide, midTwo, down);
+                        } else if (this.oneOnSide(valuedSide, midThree)) {
+                            moves = this.threeMidHelperUp(moves, valuedSide, midThree, down);
+                        }
+                        notDone = !notDone;
+                    }
+                }
+            }
+            this.translateAndExecute(translate, moves);
+        }
+
+
+    }
+
+    private ArrayList<Move> threeMidHelperUp(ArrayList<Move> moves, Character valuedSide, Edge mid, Edge up) {
+        if (this.oneOnSide(valuedSide, mid)) {
+            if ((up.equals(Edge.FU) && mid.equals(Edge.FR)) || (up.equals(Edge.UR) && mid.equals(Edge.BR)) || (up.equals(Edge.BU) && mid.equals(Edge.BL)) || (up.equals(Edge.UL) && mid.equals(Edge.FL))) {
+                moves.add(Move.getMove(translate.get('R'), Direction.Clockwise));
+                moves.add(Move.getMove(translate.get('F'), Direction.Counterclockwise));
+                moves.add(Move.getMove(translate.get('R'), Direction.Counterclockwise));
+            } else if ((up.equals(Edge.FU) && mid.equals(Edge.FL)) || (up.equals(Edge.UL) && mid.equals(Edge.BL)) || (up.equals(Edge.BU) && mid.equals(Edge.BR)) || (up.equals(Edge.UR) && mid.equals(Edge.FR))) {
+                moves.add(Move.getMove(translate.get('L'), Direction.Counterclockwise));
+                moves.add(Move.getMove(translate.get('F'), Direction.Clockwise));
+                moves.add(Move.getMove(translate.get('L'), Direction.Clockwise));
+            }
+        }
+        return moves;
+    }
+
+    private ArrayList<Move> threeMidHelperDown(ArrayList<Move> moves, Character valuedSide, Edge mid, Edge down) {
+        if (this.oneOnSide(valuedSide, mid)) {
+            if ((down.equals(Edge.FD) && mid.equals(Edge.FL)) || (down.equals(Edge.DR) && mid.equals(Edge.FR)) || (down.equals(Edge.BD) && mid.equals(Edge.BR)) || (down.equals(Edge.DL) && mid.equals(Edge.BL))) {
+                moves.add(Move.getMove(translate.get('L'), Direction.Counterclockwise));
+                moves.add(Move.getMove(translate.get('F'), Direction.Counterclockwise));
+                moves.add(Move.getMove(translate.get('L'), Direction.Clockwise));
+            } else if ((down.equals(Edge.FD) && mid.equals(Edge.FR)) || (down.equals(Edge.DL) && mid.equals(Edge.FL)) || (down.equals(Edge.BD) && mid.equals(Edge.BL)) || (down.equals(Edge.DR) && mid.equals(Edge.BR))) {
+                moves.add(Move.getMove(translate.get('R'), Direction.Clockwise));
+                moves.add(Move.getMove(translate.get('F'), Direction.Clockwise));
+                moves.add(Move.getMove(translate.get('R'), Direction.Counterclockwise));
+            }
+        }
+        return moves;
+    }
+
+    private Character notUpOrDown(Edge e) {
+        if (e.primary == 'U' || e.primary == 'D') {
+            return e.secondary;
+        } else {
+            return e.primary;
+        }
     }
 
 

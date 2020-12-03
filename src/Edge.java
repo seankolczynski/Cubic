@@ -69,4 +69,6 @@ public enum Edge {
             throw new IllegalArgumentException("Not given an edge");
         }
     }
+
+
 }
