@@ -1058,18 +1058,25 @@ public class Thistlethwaite {
                     Character other = translate.get(middles.get(0));
                     switch (other) {
                         case 'R':
-                            moves.add(Move.uClock);
+                            moves.add(Move.bCounter);
+                            moves.add(Move.lCounter);
+                            moves.add(Move.fClock);
                             break;
                         case 'L':
-                            moves.add(Move.uCounter);
+                            moves.add(Move.bClock);
+                            moves.add(Move.rClock);
+                            moves.add(Move.fClock);
                             break;
                         case 'B':
-                            moves.add(Move.uEighty);
+                            moves.add(Move.rClock);
+                            moves.add(Move.lCounter);
+                            moves.add(Move.fClock);
                             break;
+                        case 'F':
+                            moves.add(Move.rCounter);
+                            moves.add(Move.bCounter);
+                            moves.add(Move.lCounter);
                     }
-                    moves.add(Move.rClock);
-                    moves.add(Move.lCounter);
-                    moves.add(Move.fClock);
                     notDone = !notDone;
                 } else if (midCount == 1) {
                     Edge mid = midEdges.get(0);
@@ -1161,14 +1168,24 @@ public class Thistlethwaite {
                     Character other = translate.get(middles.get(0));
                     switch (other) {
                         case 'R':
-                            moves.add(Move.dCounter);
+                            moves.add(Move.bCounter);
+                            moves.add(Move.lCounter);
+                            moves.add(Move.fClock);
                             break;
                         case 'L':
-                            moves.add(Move.dClock);
+                            moves.add(Move.bClock);
+                            moves.add(Move.rClock);
+                            moves.add(Move.fClock);
                             break;
                         case 'B':
-                            moves.add(Move.dEighty);
+                            moves.add(Move.rClock);
+                            moves.add(Move.lCounter);
+                            moves.add(Move.fClock);
                             break;
+                        case 'F':
+                            moves.add(Move.rCounter);
+                            moves.add(Move.bCounter);
+                            moves.add(Move.lCounter);
                     }
                     moves.add(Move.rCounter);
                     moves.add(Move.lClock);
@@ -1318,17 +1335,22 @@ public class Thistlethwaite {
                         }
                         notDone = !notDone;
                     }
-                } else if (midCount == 2) {
-                    if (uCount == 1 && dCount == 1) {
-                        Edge up = upEdges.get(0);
-                        Edge down = downEdges.get(0);
-                        if (Utils.shareFace(up, down)) {
-                            
+                }
+            } else if (midCount == 2) {
+                Edge midOne = midEdges.get(0);
+                Edge midTwo = midEdges.get(1);
+                if (uCount == 1 && dCount == 1) {
+                    Edge up = upEdges.get(0);
+                    Edge down = downEdges.get(0);
+                    if (Utils.shareFace(up, down)) {
+                        if (Utils.shareFace(midOne, midTwo)) {
+
                         }
 
                     }
 
                 }
+
             }
             this.translateAndExecute(translate, moves);
         }
