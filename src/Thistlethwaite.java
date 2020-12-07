@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +10,16 @@ public class Thistlethwaite {
     Cube cube;
     Random r;
     HashMap<Character, Character> translate;
-
+    HashMap<Integer, Integer> cornerRows;
 
 
     public Thistlethwaite() {
         this.r = new Random();
+        try {
+            this.cornerRows = Utils.initialize();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public Cube solve(Cube cube) {
@@ -21,6 +27,7 @@ public class Thistlethwaite {
         colorToFace = this.pairSides();
         this.phaseOne();
         this.phaseTwo();
+        this.phaseThree();
 
         return cube;
     }
@@ -66,15 +73,22 @@ public class Thistlethwaite {
                                 || edgeF.equals(this.colorToFace.get('D').getLetter())) {
                             Character oppEdgeF = null;
                             if (y == 1) {
-                                if (x == 0) {oppEdgeF = leftFace.getSquares()[2][1];}
-                                if (x == 2) {oppEdgeF = rightFace.getSquares()[0][1];}
-                            }
-                            else if (x == 1) {
-                                if (y == 0) {oppEdgeF = downFace.getSquares()[1][2];}
-                                if (y == 2) {oppEdgeF = upFace.getSquares()[1][0];}
+                                if (x == 0) {
+                                    oppEdgeF = leftFace.getSquares()[2][1];
+                                }
+                                if (x == 2) {
+                                    oppEdgeF = rightFace.getSquares()[0][1];
+                                }
+                            } else if (x == 1) {
+                                if (y == 0) {
+                                    oppEdgeF = downFace.getSquares()[1][2];
+                                }
+                                if (y == 2) {
+                                    oppEdgeF = upFace.getSquares()[1][0];
+                                }
                             }
                             if (oppEdgeF.equals(this.colorToFace.get('F').getLetter()) ||
-                                oppEdgeF.equals(this.colorToFace.get('B').getLetter())) {
+                                    oppEdgeF.equals(this.colorToFace.get('B').getLetter())) {
                                 countBad = countBad + 1;
                                 badEdges.add(Edge.edgeNumber('F', x, y));
                             }
@@ -89,12 +103,19 @@ public class Thistlethwaite {
                                 || edgeB.equals(this.colorToFace.get('D').getLetter())) {
                             Character oppEdgeB = null;
                             if (y == 1) {
-                                if (x == 0) {oppEdgeB = rightFace.getSquares()[2][1];}
-                                if (x == 2) {oppEdgeB = leftFace.getSquares()[0][1];}
-                            }
-                            else if (x == 1) {
-                                if (y == 0) {oppEdgeB = downFace.getSquares()[1][0];}
-                                if (y == 2) {oppEdgeB = upFace.getSquares()[1][2];}
+                                if (x == 0) {
+                                    oppEdgeB = rightFace.getSquares()[2][1];
+                                }
+                                if (x == 2) {
+                                    oppEdgeB = leftFace.getSquares()[0][1];
+                                }
+                            } else if (x == 1) {
+                                if (y == 0) {
+                                    oppEdgeB = downFace.getSquares()[1][0];
+                                }
+                                if (y == 2) {
+                                    oppEdgeB = upFace.getSquares()[1][2];
+                                }
                             }
                             if (oppEdgeB.equals(this.colorToFace.get('F').getLetter()) ||
                                     oppEdgeB.equals(this.colorToFace.get('B').getLetter())) {
@@ -109,10 +130,14 @@ public class Thistlethwaite {
                                 countBad++;
                                 badEdges.add(Edge.edgeNumber('U', x, y));
                             } else if (edgeU.equals(this.colorToFace.get('U').getLetter())
-                                    || edgeU.equals(this.colorToFace.get('D').getLetter()))  {
+                                    || edgeU.equals(this.colorToFace.get('D').getLetter())) {
                                 Character oppEdgeU = null;
-                                if (x == 0) {oppEdgeU = leftFace.getSquares()[1][2];}
-                                if (x == 2) {oppEdgeU = rightFace.getSquares()[1][2];}
+                                if (x == 0) {
+                                    oppEdgeU = leftFace.getSquares()[1][2];
+                                }
+                                if (x == 2) {
+                                    oppEdgeU = rightFace.getSquares()[1][2];
+                                }
                                 if (oppEdgeU.equals(this.colorToFace.get('F').getLetter()) ||
                                         oppEdgeU.equals(this.colorToFace.get('B').getLetter())) {
                                     countBad++;
@@ -126,10 +151,14 @@ public class Thistlethwaite {
                                 countBad++;
                                 badEdges.add(Edge.edgeNumber('D', x, y));
                             } else if (edgeD.equals(this.colorToFace.get('U').getLetter())
-                                    || edgeD.equals(this.colorToFace.get('D').getLetter()))  {
+                                    || edgeD.equals(this.colorToFace.get('D').getLetter())) {
                                 Character oppEdgeD = null;
-                                if (x == 0) {oppEdgeD = leftFace.getSquares()[1][0];}
-                                if (x == 2) {oppEdgeD = rightFace.getSquares()[1][0];}
+                                if (x == 0) {
+                                    oppEdgeD = leftFace.getSquares()[1][0];
+                                }
+                                if (x == 2) {
+                                    oppEdgeD = rightFace.getSquares()[1][0];
+                                }
                                 if (oppEdgeD.equals(this.colorToFace.get('F').getLetter()) ||
                                         oppEdgeD.equals(this.colorToFace.get('B').getLetter())) {
                                     countBad++;
@@ -143,7 +172,7 @@ public class Thistlethwaite {
 
             //Now that we have our edges, we have to act
             int uCount = 0;
-            int dCount= 0;
+            int dCount = 0;
             int midCount = 0;
             ArrayList<Edge> upEdges = new ArrayList<>();
             ArrayList<Edge> downEdges = new ArrayList<>();
@@ -162,7 +191,7 @@ public class Thistlethwaite {
             }
             ArrayList<Move> moves = new ArrayList<Move>();
             translate = Utils.horizontalMap('F');
-            switch(badEdges.size()) {
+            switch (badEdges.size()) {
                 case 0:
                     //By some miracle(.05% chance) no edges are bad! Do nothing.
                     countBad = 0;
@@ -196,7 +225,7 @@ public class Thistlethwaite {
                             moves.add(Move.uClock);
                             moves.add(Move.getMove(translate.get('L'), Direction.Clockwise));
                             moves.add(Move.uCounter);
-                        }  else if ((faceValue == 'F' && otherValue == 'L') || (faceValue == 'L' && otherValue == 'B') || (faceValue == 'B' && otherValue == 'R') || (faceValue == 'R' && otherValue == 'F')) {
+                        } else if ((faceValue == 'F' && otherValue == 'L') || (faceValue == 'L' && otherValue == 'B') || (faceValue == 'B' && otherValue == 'R') || (faceValue == 'R' && otherValue == 'F')) {
                             moves.add(Move.getMove(otherValue, Direction.Counterclockwise));
                             moves.add(Move.uClock);
                             moves.add(Move.getMove(otherValue, Direction.Clockwise));
@@ -229,14 +258,13 @@ public class Thistlethwaite {
                             moves.add(Move.dClock);
                             moves.add(Move.getMove(translate.get('R'), Direction.Clockwise));
                             moves.add(Move.dCounter);
-                        }  else if ((faceValue == 'F' && otherValue == 'L') || (faceValue == 'L' && otherValue == 'B') || (faceValue == 'B' && otherValue == 'R') || (faceValue == 'R' && otherValue == 'F')) {
+                        } else if ((faceValue == 'F' && otherValue == 'L') || (faceValue == 'L' && otherValue == 'B') || (faceValue == 'B' && otherValue == 'R') || (faceValue == 'R' && otherValue == 'F')) {
                             moves.add(Move.getMove(otherValue, Direction.Counterclockwise));
                             moves.add(Move.uCounter);
                             moves.add(Move.getMove(otherValue, Direction.Clockwise));
                             moves.add(Move.uClock);
                         }
-                    }
-                    else if (uCount == 1) {
+                    } else if (uCount == 1) {
                         if (dCount == 1) {
                             Edge up = upEdges.get(0);
                             Edge down = downEdges.get(0);
@@ -269,8 +297,7 @@ public class Thistlethwaite {
                                         moves.add(Move.uCounter);
                                         moves.add(Move.fClock);
                                         moves.add(Move.uClock);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.uClock);
                                         moves.add(Move.fClock);
                                         moves.add(Move.uCounter);
@@ -289,8 +316,7 @@ public class Thistlethwaite {
                                         moves.add(Move.uCounter);
                                         moves.add(Move.fCounter);
                                         moves.add(Move.uClock);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.uClock);
                                         moves.add(Move.fCounter);
                                         moves.add(Move.uCounter);
@@ -309,8 +335,7 @@ public class Thistlethwaite {
                                         moves.add(Move.uCounter);
                                         moves.add(Move.bCounter);
                                         moves.add(Move.uClock);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.uCounter);
                                         moves.add(Move.bCounter);
                                         moves.add(Move.uClock);
@@ -329,8 +354,7 @@ public class Thistlethwaite {
                                         moves.add(Move.uClock);
                                         moves.add(Move.bClock);
                                         moves.add(Move.uCounter);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.uCounter);
                                         moves.add(Move.bClock);
                                         moves.add(Move.uClock);
@@ -356,8 +380,7 @@ public class Thistlethwaite {
                                         moves.add(Move.dClock);
                                         moves.add(Move.fCounter);
                                         moves.add(Move.dCounter);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.dCounter);
                                         moves.add(Move.fCounter);
                                         moves.add(Move.dClock);
@@ -376,8 +399,7 @@ public class Thistlethwaite {
                                         moves.add(Move.dClock);
                                         moves.add(Move.fClock);
                                         moves.add(Move.dCounter);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.dCounter);
                                         moves.add(Move.fClock);
                                         moves.add(Move.dClock);
@@ -415,8 +437,7 @@ public class Thistlethwaite {
                                         moves.add(Move.dCounter);
                                         moves.add(Move.bCounter);
                                         moves.add(Move.dClock);
-                                    }
-                                    else {
+                                    } else {
                                         moves.add(Move.dClock);
                                         moves.add(Move.bCounter);
                                         moves.add(Move.dCounter);
@@ -482,20 +503,36 @@ public class Thistlethwaite {
                     } else {
                         ArrayList<Edge> goodEdges = new ArrayList<>();
                         for (Edge e : Edge.values()) {
-                            if (!badEdges.contains(e))  {
+                            if (!badEdges.contains(e)) {
                                 goodEdges.add(e);
                             }
                         }
                         for (Edge ge : goodEdges) {
                             switch (ge) {
-                                case FU: moves.add(Move.fRandom); break;
-                                case FD: moves.add(Move.fRandom); break;
-                                case BU: moves.add(Move.bRandom); break;
-                                case BD: moves.add(Move.bRandom); break;
-                                case UL: moves.add(Move.lRandom); break;
-                                case UR: moves.add(Move.rRandom); break;
-                                case DL: moves.add(Move.lRandom); break;
-                                case DR: moves.add(Move.rRandom); break;
+                                case FU:
+                                    moves.add(Move.fRandom);
+                                    break;
+                                case FD:
+                                    moves.add(Move.fRandom);
+                                    break;
+                                case BU:
+                                    moves.add(Move.bRandom);
+                                    break;
+                                case BD:
+                                    moves.add(Move.bRandom);
+                                    break;
+                                case UL:
+                                    moves.add(Move.lRandom);
+                                    break;
+                                case UR:
+                                    moves.add(Move.rRandom);
+                                    break;
+                                case DL:
+                                    moves.add(Move.lRandom);
+                                    break;
+                                case DR:
+                                    moves.add(Move.rRandom);
+                                    break;
                             }
                         }
                         moves.add(Move.uRandom);
@@ -744,8 +781,7 @@ public class Thistlethwaite {
                         //moves.add(Move.bEighty);
                         moves.add(Move.uClock);
                     }
-                } else
-                if (sharedFace.equals(downOne.primary) || sharedFace.equals(downOne.secondary)) {
+                } else if (sharedFace.equals(downOne.primary) || sharedFace.equals(downOne.secondary)) {
                     if (translate.get('R').equals(upOne.primary) || translate.get('R').equals(upOne.secondary)) {
                         //moves.add(Move.uCounter);
                         moves.add(Move.rCounter);
@@ -874,8 +910,7 @@ public class Thistlethwaite {
             } else if (midThree.secondary.equals(blocked)) {
                 moves.add(Move.getMove(midThree.primary, Direction.Counterclockwise));
             }
-        }
-        else if (midCount == 3 && dCount == 1) {
+        } else if (midCount == 3 && dCount == 1) {
             Edge down = downEdges.get(0);
             Edge midOne = midEdges.get(0);
             Edge midTwo = midEdges.get(1);
@@ -888,22 +923,20 @@ public class Thistlethwaite {
             }
             if (midOne.primary.equals(blocked)) {
                 moves.add(Move.getMove(midOne.secondary, Direction.Clockwise));
-            }
-            else if (midOne.secondary.equals(blocked)) {
+            } else if (midOne.secondary.equals(blocked)) {
                 moves.add(Move.getMove(midOne.primary, Direction.Counterclockwise));
-            } if (midTwo.primary.equals(blocked)) {
+            }
+            if (midTwo.primary.equals(blocked)) {
                 moves.add(Move.getMove(midTwo.secondary, Direction.Clockwise));
-            }
-            else if (midTwo.secondary.equals(blocked)) {
+            } else if (midTwo.secondary.equals(blocked)) {
                 moves.add(Move.getMove(midTwo.primary, Direction.Counterclockwise));
-            } if (midOne.primary.equals(blocked)) {
-                moves.add(Move.getMove(midOne.secondary, Direction.Clockwise));
             }
-            else if (midThree.secondary.equals(blocked)) {
+            if (midOne.primary.equals(blocked)) {
+                moves.add(Move.getMove(midOne.secondary, Direction.Clockwise));
+            } else if (midThree.secondary.equals(blocked)) {
                 moves.add(Move.getMove(midThree.primary, Direction.Counterclockwise));
             }
-        }
-        else if (dCount == 1 && uCount == 3) {
+        } else if (dCount == 1 && uCount == 3) {
             Edge upOne = upEdges.get(0);
             Edge upTwo = upEdges.get(1);
             Edge upThree = upEdges.get(2);
@@ -942,7 +975,6 @@ public class Thistlethwaite {
     }
 
 
-
     private void translateAndExecute(HashMap<Character, Character> map, List<Move> moves) {
         for (Move move : moves) {
             Character actual = map.get(move.face);
@@ -975,37 +1007,72 @@ public class Thistlethwaite {
         Side downFace = this.cube.getSide(this.colorToFace.get('D'));
         ArrayList<Edge> fronts = new ArrayList<>();
 
-       for (Edge e: Edge.values()) {
-           switch (e) {
-               case FU:
-                   if (frontFace.squares[1][2] == 'F' || upFace.squares[1][0] == 'F') {fronts.add(e);} break;
-               case FD:
-                   if (frontFace.squares[1][0] == 'F' || downFace.squares[1][2] == 'F') {fronts.add(e);} break;
-               case FR:
-                   if (frontFace.squares[2][1] == 'F' || rightFace.squares[0][1] == 'F') {fronts.add(e);} break;
-               case FL:
-                   if (frontFace.squares[0][1] == 'F' || leftFace.squares[2][1] == 'F') {fronts.add(e);} break;
-               case BU:
-                   if (backFace.squares[1][2] == 'F' || upFace.squares[1][2] == 'F') {fronts.add(e);} break;
-               case BD:
-                   if (backFace.squares[1][0] == 'F' || downFace.squares[1][0] == 'F') {fronts.add(e);} break;
-               case BR:
-                   if (backFace.squares[0][1] == 'F' || rightFace.squares[2][1] == 'F') {fronts.add(e);} break;
-               case BL:
-                   if (backFace.squares[2][1] == 'F' || leftFace.squares[0][1] == 'F') {fronts.add(e);} break;
-               case UR:
-                   if (upFace.squares[2][1] == 'F' || rightFace.squares[1][2] == 'F') {fronts.add(e);} break;
-               case UL:
-                   if (upFace.squares[0][1] == 'F' || leftFace.squares[1][2] == 'F') {fronts.add(e);} break;
-               case DR:
-                   if (downFace.squares[2][1] == 'F' || rightFace.squares[1][0] == 'F') {fronts.add(e);} break;
-               case DL:
-                   if (downFace.squares[0][1] == 'F' || leftFace.squares[1][0] == 'F') {fronts.add(e);} break;
-           }
-       }
-
+        for (Edge e : Edge.values()) {
+            switch (e) {
+                case FU:
+                    if (Utils.FBUDEdges(frontFace, 1, 2, upFace, 1, 0)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case FD:
+                    if (Utils.FBUDEdges(frontFace, 1, 0, downFace, 1, 2)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case FR:
+                    if (Utils.FBUDEdges(frontFace, 2, 1, rightFace, 0, 1)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case FL:
+                    if (Utils.FBUDEdges(frontFace, 0, 1, leftFace, 2, 1)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case BU:
+                    if (Utils.FBUDEdges(backFace, 1, 2, upFace, 1, 2)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case BD:
+                    if (Utils.FBUDEdges(backFace, 1, 0, downFace, 1, 0)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case BR:
+                    if (Utils.FBUDEdges(backFace, 0, 1, rightFace, 2, 1)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case BL:
+                    if (Utils.FBUDEdges(backFace, 2, 1, leftFace, 0, 1)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case UR:
+                    if (Utils.FBUDEdges(upFace, 2, 1, rightFace, 1, 2)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case UL:
+                    if (Utils.FBUDEdges(upFace, 0, 1, leftFace, 1, 2)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case DR:
+                    if (Utils.FBUDEdges(downFace, 2, 1, rightFace, 1, 0)) {
+                        fronts.add(e);
+                    }
+                    break;
+                case DL:
+                    if (Utils.FBUDEdges(downFace, 0, 1, leftFace, 1, 0)) {
+                        fronts.add(e);
+                    }
+                    break;
+            }
+        }
         int uCount = 0;
-        int dCount= 0;
+        int dCount = 0;
         int midCount = 0;
         ArrayList<Edge> upEdges = new ArrayList<>();
         ArrayList<Edge> downEdges = new ArrayList<>();
@@ -1041,8 +1108,7 @@ public class Thistlethwaite {
                 notDone = !notDone;
             } else if (midCount == 4) {
                 notDone = false;
-            }
-            else if (uCount == 3) {
+            } else if (uCount == 3) {
                 ArrayList<Character> middles = new ArrayList();
                 middles.add('F');
                 middles.add('R');
@@ -1063,12 +1129,12 @@ public class Thistlethwaite {
                         case 'R':
                             moves.add(Move.bCounter);
                             moves.add(Move.lCounter);
-                            moves.add(Move.fClock);
+                            moves.add(Move.fRandom);
                             break;
                         case 'L':
                             moves.add(Move.bClock);
                             moves.add(Move.rClock);
-                            moves.add(Move.fClock);
+                            moves.add(Move.fRandom);
                             break;
                         case 'B':
                             moves.add(Move.rClock);
@@ -1076,9 +1142,10 @@ public class Thistlethwaite {
                             moves.add(Move.fClock);
                             break;
                         case 'F':
-                            moves.add(Move.rCounter);
-                            moves.add(Move.bCounter);
+                            moves.add(Move.uEighty);
+                            moves.add(Move.rClock);
                             moves.add(Move.lCounter);
+                            moves.add(Move.fRandom);
                     }
                     notDone = !notDone;
                 } else if (midCount == 1) {
@@ -1090,15 +1157,12 @@ public class Thistlethwaite {
                             if (other.equals('F')) {
                                 moves.add(Move.fCounter);
                                 notDone = false;
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.rClock);
                                 notDone = false;
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.uClock);
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.uCounter);
                             }
                             break;
@@ -1106,14 +1170,11 @@ public class Thistlethwaite {
                             if (other.equals('F')) {
                                 moves.add(Move.fClock);
                                 notDone = false;
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.uClock);
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.uCounter);
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.lCounter);
                                 notDone = false;
                             }
@@ -1121,15 +1182,12 @@ public class Thistlethwaite {
                         case BL:
                             if (other.equals('F')) {
                                 moves.add(Move.uClock);
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.uCounter);
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.bCounter);
                                 notDone = false;
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.lClock);
                                 notDone = false;
                             }
@@ -1137,21 +1195,18 @@ public class Thistlethwaite {
                         case BR:
                             if (other.equals('F')) {
                                 moves.add(Move.uCounter);
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.rCounter);
                                 notDone = false;
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.bClock);
                                 notDone = false;
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.uClock);
                             }
                             break;
-                            }
                     }
+                }
             } else if (dCount == 3) {
                 ArrayList<Character> middles = new ArrayList();
                 middles.add('F');
@@ -1171,28 +1226,26 @@ public class Thistlethwaite {
                     Character other = translate.get(middles.get(0));
                     switch (other) {
                         case 'R':
-                            moves.add(Move.bCounter);
-                            moves.add(Move.lCounter);
-                            moves.add(Move.fClock);
+                            moves.add(Move.bClock);
+                            moves.add(Move.lClock);
+                            moves.add(Move.fRandom);
                             break;
                         case 'L':
-                            moves.add(Move.bClock);
-                            moves.add(Move.rClock);
-                            moves.add(Move.fClock);
+                            moves.add(Move.bCounter);
+                            moves.add(Move.rCounter);
+                            moves.add(Move.fRandom);
                             break;
                         case 'B':
-                            moves.add(Move.rClock);
-                            moves.add(Move.lCounter);
+                            moves.add(Move.rCounter);
+                            moves.add(Move.lClock);
                             moves.add(Move.fClock);
                             break;
                         case 'F':
-                            moves.add(Move.rCounter);
-                            moves.add(Move.bCounter);
+                            moves.add(Move.uEighty);
                             moves.add(Move.lCounter);
+                            moves.add(Move.rClock);
+                            moves.add(Move.bRandom);
                     }
-                    moves.add(Move.rCounter);
-                    moves.add(Move.lClock);
-                    moves.add(Move.fClock);
                     notDone = !notDone;
                 } else if (midCount == 1) {
                     Edge mid = midEdges.get(0);
@@ -1203,30 +1256,24 @@ public class Thistlethwaite {
                             if (other.equals('F')) {
                                 moves.add(Move.fClock);
                                 notDone = false;
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.rCounter);
                                 notDone = false;
-                            }
-                            else if (other.equals('B')) {
-                                moves.add(Move.dCounter);
-                            }
-                            else if (other.equals('L')) {
-                                moves.add(Move.dClock);
+                            } else if (other.equals('B')) {
+                                moves.add(Move.dEighty);
+                            } else if (other.equals('L')) {
+                                moves.add(Move.dEighty);
                             }
                             break;
                         case FL:
                             if (other.equals('F')) {
                                 moves.add(Move.fCounter);
                                 notDone = false;
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.dCounter);
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.dClock);
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.lClock);
                                 notDone = false;
                             }
@@ -1234,15 +1281,12 @@ public class Thistlethwaite {
                         case BL:
                             if (other.equals('F')) {
                                 moves.add(Move.dCounter);
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.dClock);
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.bClock);
                                 notDone = false;
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.lCounter);
                                 notDone = false;
                             }
@@ -1250,16 +1294,13 @@ public class Thistlethwaite {
                         case BR:
                             if (other.equals('F')) {
                                 moves.add(Move.dClock);
-                            }
-                            else if (other.equals('R')) {
+                            } else if (other.equals('R')) {
                                 moves.add(Move.rClock);
                                 notDone = false;
-                            }
-                            else if (other.equals('B')) {
+                            } else if (other.equals('B')) {
                                 moves.add(Move.bCounter);
                                 notDone = false;
-                            }
-                            else if (other.equals('L')) {
+                            } else if (other.equals('L')) {
                                 moves.add(Move.dCounter);
                             }
                             break;
@@ -1269,7 +1310,7 @@ public class Thistlethwaite {
                 Edge upOne = upEdges.get(0);
                 Edge upTwo = upEdges.get(1);
                 Edge downOne = downEdges.get(0);
-                Edge downTwo =downEdges.get(1);
+                Edge downTwo = downEdges.get(1);
                 Character upOneFace = Utils.notUpOrDown(upOne);
                 Character upTwoFace = Utils.notUpOrDown(upTwo);
                 if (Utils.onSide(upOneFace, downOne, downTwo)) {
@@ -1321,8 +1362,7 @@ public class Thistlethwaite {
                         }
                     }
                     notDone = !notDone;
-                }
-                else if (dCount == 1) {
+                } else if (dCount == 1) {
                     Edge down = downEdges.get(0);
                     Character valuedSide = Utils.notUpOrDown(down);
                     translate = Utils.horizontalMap(valuedSide);
@@ -1404,7 +1444,8 @@ public class Thistlethwaite {
                         moves.add(Move.fEighty);
                     }
 
-                } if (uCount == 2) {
+                }
+                if (uCount == 2) {
                     Edge upOne = upEdges.get(0);
                     Edge upTwo = upEdges.get(1);
                     if (Utils.shareFace(midOne, midTwo)) {
@@ -1417,38 +1458,33 @@ public class Thistlethwaite {
                                 moves.add(Move.rEighty);
                                 moves.add(Move.fRandom);
                                 notDone = false;
-                            } else
-                            if (Utils.oneOnSide(translate.get('R'), upTwo) || Utils.oneOnSide(translate.get('R'), upOne)) {
+                            } else if (Utils.oneOnSide(translate.get('R'), upTwo) || Utils.oneOnSide(translate.get('R'), upOne)) {
                                 moves.add(Move.fCounter);
                                 moves.add(Move.lEighty);
                                 moves.add(Move.rClock);
                                 moves.add(Move.fRandom);
                                 notDone = false;
-                            } else
-                            if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
+                            } else if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
                                 moves.add(Move.bEighty);
                                 moves.add(Move.uEighty);
                                 moves.add(Move.bRandom);
                                 notDone = false;
                             }
-                        } else
-                        if (Utils.oneOnSide(translate.get('L'), upOne) || Utils.oneOnSide(translate.get('L'), upTwo)) {
+                        } else if (Utils.oneOnSide(translate.get('L'), upOne) || Utils.oneOnSide(translate.get('L'), upTwo)) {
                             if (Utils.oneOnSide(translate.get('R'), upTwo) || Utils.oneOnSide(translate.get('R'), upOne)) {
                                 moves.add(Move.fRandom);
                                 moves.add(Move.lCounter);
                                 moves.add(Move.rClock);
                                 moves.add(Move.fRandom);
                                 notDone = false;
-                            } else
-                            if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
+                            } else if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
                                 moves.add(Move.fRandom);
                                 moves.add(Move.bCounter);
                                 moves.add(Move.lCounter);
                                 moves.add(Move.fRandom);
                                 notDone = false;
                             }
-                        } else
-                        if (Utils.oneOnSide(translate.get('R'), upOne) || Utils.oneOnSide(translate.get('R'), upTwo)) {
+                        } else if (Utils.oneOnSide(translate.get('R'), upOne) || Utils.oneOnSide(translate.get('R'), upTwo)) {
                             if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
                                 moves.add(Move.fRandom);
                                 moves.add(Move.bClock);
@@ -1458,7 +1494,7 @@ public class Thistlethwaite {
                             }
                         }
                     }
-                } else  if (dCount == 2) {
+                } else if (dCount == 2) {
                     Edge downOne = downEdges.get(0);
                     Edge downTwo = downEdges.get(1);
                     if (Utils.shareFace(midOne, midTwo)) {
@@ -1471,38 +1507,33 @@ public class Thistlethwaite {
                                 moves.add(Move.rEighty);
                                 moves.add(Move.fRandom);
                                 notDone = false;
-                            } else
-                            if (Utils.oneOnSide(translate.get('R'), downTwo) || Utils.oneOnSide(translate.get('R'), downOne)) {
+                            } else if (Utils.oneOnSide(translate.get('R'), downTwo) || Utils.oneOnSide(translate.get('R'), downOne)) {
                                 moves.add(Move.fClock);
                                 moves.add(Move.rCounter);
                                 moves.add(Move.lEighty);
                                 moves.add(Move.fRandom);
                                 notDone = false;
-                            } else
-                            if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
+                            } else if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
                                 moves.add(Move.bEighty);
                                 moves.add(Move.dEighty);
                                 moves.add(Move.bRandom);
                                 notDone = false;
                             }
-                        } else
-                        if (Utils.oneOnSide(translate.get('L'), downOne) || Utils.oneOnSide(translate.get('L'), downTwo)) {
+                        } else if (Utils.oneOnSide(translate.get('L'), downOne) || Utils.oneOnSide(translate.get('L'), downTwo)) {
                             if (Utils.oneOnSide(translate.get('R'), downTwo) || Utils.oneOnSide(translate.get('R'), downOne)) {
                                 moves.add(Move.fRandom);
                                 moves.add(Move.lClock);
                                 moves.add(Move.rCounter);
                                 moves.add(Move.fRandom);
                                 notDone = false;
-                            } else
-                            if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
+                            } else if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
                                 moves.add(Move.fRandom);
                                 moves.add(Move.bClock);
                                 moves.add(Move.lClock);
                                 moves.add(Move.fRandom);
                                 notDone = false;
                             }
-                        } else
-                        if (Utils.oneOnSide(translate.get('R'), downOne) || Utils.oneOnSide(translate.get('R'), downTwo)) {
+                        } else if (Utils.oneOnSide(translate.get('R'), downOne) || Utils.oneOnSide(translate.get('R'), downTwo)) {
                             if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
                                 moves.add(Move.fRandom);
                                 moves.add(Move.bCounter);
@@ -1518,14 +1549,99 @@ public class Thistlethwaite {
         }
 
 
-        
-
-
-
-
-
-
-
+        frontFace = this.cube.getSide(this.colorToFace.get('F'));
+        backFace = this.cube.getSide(this.colorToFace.get('B'));
+        upFace = this.cube.getSide(this.colorToFace.get('U'));
+        downFace = this.cube.getSide(this.colorToFace.get('D'));
+        translate = Utils.horizontalMap('F');
+        Character ud;
+        Character fb;
+        // Now it is time reference the tables
+        StringBuffer cornerStatus = new StringBuffer();
+        String adding;
+        for (int corn = 0; corn < 8; corn++) {
+            adding = "0";
+            switch (Corner.numToCorner(corn + 1)) {
+                case UBL:
+                    ud = upFace.squares[0][2];
+                    fb = backFace.squares[2][2];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "2";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "1";
+                    }
+                    break;
+                case UFL:
+                    ud = upFace.squares[0][0];
+                    fb = frontFace.squares[0][2];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "1";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "2";
+                    }
+                    break;
+                case UFR:
+                    ud = upFace.squares[2][0];
+                    fb = frontFace.squares[2][2];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "1";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "2";
+                    }
+                    break;
+                case UBR:
+                    ud = upFace.squares[2][2];
+                    fb = backFace.squares[0][2];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "2";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "1";
+                    }
+                    break;
+                case DBL:
+                    ud = downFace.squares[0][0];
+                    fb = backFace.squares[2][0];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "1";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "2";
+                    }
+                    break;
+                case DBR:
+                    ud = downFace.squares[2][0];
+                    fb = backFace.squares[0][0];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "1";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "2";
+                    }
+                    break;
+                case DFL:
+                    ud = downFace.squares[0][2];
+                    fb = frontFace.squares[0][0];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "2";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "1";
+                    }
+                    break;
+                case DFR:
+                    ud = downFace.squares[2][2];
+                    fb = frontFace.squares[2][0];
+                    if (ud.equals('L') || ud.equals('R')) {
+                        adding = "2";
+                    } else if (fb.equals('L') || fb.equals('R')) {
+                        adding = "1";
+                    }
+                    break;
+            }
+            cornerStatus.append(adding);
+        }
+        int cornerInt = Integer.parseInt(cornerStatus.toString());
+        int row = this.cornerRows.get(cornerInt);
+        ArrayList<Move> moves = new ArrayList<Move>();
+        moves = Utils.grabCornerMoves(row, moves);
+        this.translateAndExecute(translate, moves);
 
 
 
@@ -1562,8 +1678,9 @@ public class Thistlethwaite {
         return moves;
     }
 
-
-
+    private void phaseThree() {
+        
+    }
 
 
 }

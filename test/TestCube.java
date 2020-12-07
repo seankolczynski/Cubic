@@ -1,5 +1,9 @@
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import static org.junit.Assert.assertEquals;
 
 public class TestCube {
@@ -354,6 +358,29 @@ public class TestCube {
         c.rotate(Color.GREEN, false);
         System.out.println(c.toString());
         t.solve(c);
+    }
+
+    @Test
+    public void testReadFile() throws FileNotFoundException {
+        String filepath = new File("").getAbsolutePath();
+        FileReader file = new FileReader(filepath.concat("/tables/stage2.txt"));
+    }
+
+    @Test
+    public void testLeadingZeroes() {
+        System.out.println(0001);
+        String ints = new String("");
+        ints = ints + 0;
+        ints = ints + 0;
+        ints = ints + 0;
+        ints = ints + 1;
+        int i = Integer.parseInt(ints);
+        System.out.println(i);
+
+        String[] arr = new String[2];
+        arr[0] = "1";
+        arr[1] = "2";
+        String ing = arr.toString();
 
     }
 

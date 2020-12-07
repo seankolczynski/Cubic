@@ -1,4 +1,7 @@
+import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Utils {
 
@@ -83,4 +86,76 @@ public class Utils {
     }
 
 
+    public static boolean FBUDEdges(Side faceOne, int x1, int y1, Side faceTwo, int x2, int y2) {
+        return ((faceOne.squares[x1][y1].equals('F') || faceOne.squares[x1][y1].equals('D') || faceOne.squares[x1][y1].equals('B') || faceOne.squares[x1][y1].equals('U'))
+        && faceTwo.squares[x2][y2].equals('F') || faceTwo.squares[x2][y2].equals('D') || faceTwo.squares[x2][y2].equals('B') || faceTwo.squares[x2][y2].equals('U'));
+    }
+
+    public static HashMap<Integer, Integer> initialize() throws FileNotFoundException {
+        HashMap<Integer, Integer> cornerRows = new HashMap<Integer, Integer>();
+        String filepath = new File("").getAbsolutePath();
+        FileReader file = new FileReader(filepath.concat("/tables/justCorners.txt"));
+        Scanner scan = new Scanner(file);
+        int row = 0;
+        while (scan.hasNext()) {
+            row++;
+            int cornerCombo = scan.nextInt();
+            cornerRows.put(cornerCombo, row);
+        }
+        return cornerRows;
+    }
+
+    public static ArrayList<Move> grabCornerMoves(int row, ArrayList<Move> moves) {
+        String filepath = new File("").getAbsolutePath();
+        Scanner line = null;
+        try {
+            BufferedReader bruh = new BufferedReader(new FileReader(filepath.concat("/tables/phase2Moves.txt")));
+            for (int i = 0; i < row; i++) {
+                bruh.readLine();
+            }
+            line = new Scanner(bruh.readLine());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int j = 0; j < 8; j++) {
+            int moveCode = line.nextInt();
+            moves.add(Utils.numberToMove(moveCode));
+        }
+        return moves;
+    }
+
+    private static Move numberToMove(int code) {
+        switch (code) {
+            case 11:
+                return Move.lCounter;
+            case 12:
+                return Move.lEighty;
+            case 13:
+                return Move.lClock;
+            case 21:
+                return Move.fCounter;
+            case 22:
+                return Move.fEighty;
+            case 23:
+                return Move.fClock;
+            case 31:
+                return Move.rCounter;
+            case 32:
+                return Move.rEighty;
+            case 33:
+                return Move.rClock;
+            case 41:
+                return Move.bCounter;
+            case 42:
+                return Move.bEighty;
+            case 43:
+                return Move.bClock;
+            case 51:
+                return Move.uEighty;
+            case 52:
+                return Move.dEighty;
+        }
+    }
 }
