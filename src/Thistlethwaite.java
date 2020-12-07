@@ -1039,7 +1039,10 @@ public class Thistlethwaite {
                 moves.add(Move.rCounter);
                 moves.add(Move.fClock);
                 notDone = !notDone;
-            } else if (uCount == 3) {
+            } else if (midCount == 4) {
+                notDone = false;
+            }
+            else if (uCount == 3) {
                 ArrayList<Character> middles = new ArrayList();
                 middles.add('F');
                 middles.add('R');
@@ -1342,18 +1345,189 @@ public class Thistlethwaite {
                 if (uCount == 1 && dCount == 1) {
                     Edge up = upEdges.get(0);
                     Edge down = downEdges.get(0);
-                    if (Utils.shareFace(up, down)) {
-                        if (Utils.shareFace(midOne, midTwo)) {
-
+                    if (Utils.shareFace(midOne, midTwo)) {
+                        Character sharedMid = Utils.commonFace(midOne, midTwo);
+                        translate = Utils.horizontalMap(sharedMid);
+                        if (Utils.oneOnSide(sharedMid, up)) {
+                            moves.add(Move.uEighty);
                         }
-
+                        if (Utils.oneOnSide(sharedMid, down)) {
+                            moves.add(Move.dEighty);
+                        }
+                        if (Utils.oneOnSide(Utils.otherSide(sharedMid, midOne), up) || Utils.oneOnSide(Utils.otherSide(sharedMid, midTwo), up)) {
+                            if (Utils.oneOnSide(translate.get('L'), up)) {
+                                if (Utils.oneOnSide(translate.get('L'), down)) {
+                                    moves.add(Move.lCounter);
+                                    moves.add(Move.bCounter);
+                                    moves.add(Move.rClock);
+                                    moves.add(Move.fCounter);
+                                }
+                                if (Utils.oneOnSide(translate.get('R'), down)) {
+                                    moves.add(Move.lCounter);
+                                    moves.add(Move.bCounter);
+                                    moves.add(Move.rClock);
+                                    moves.add(Move.fCounter);
+                                }
+                                if (Utils.oneOnSide(translate.get('B'), down)) {
+                                    moves.add(Move.bEighty);
+                                    moves.add(Move.rClock);
+                                    moves.add(Move.fClock);
+                                }
+                                if (Utils.oneOnSide(translate.get('F'), down)) {
+                                    moves.add(Move.dEighty);
+                                }
+                            } else if (Utils.oneOnSide(translate.get('R'), up)) {
+                                if (Utils.oneOnSide(translate.get('R'), down)) {
+                                    moves.add(Move.rClock);
+                                    moves.add(Move.bClock);
+                                    moves.add(Move.lCounter);
+                                    moves.add(Move.fCounter);
+                                }
+                                if (Utils.oneOnSide(translate.get('L'), down)) {
+                                    moves.add(Move.rClock);
+                                    moves.add(Move.bClock);
+                                    moves.add(Move.lCounter);
+                                    moves.add(Move.fClock);
+                                }
+                                if (Utils.oneOnSide(translate.get('B'), down)) {
+                                    moves.add(Move.bEighty);
+                                    moves.add(Move.lCounter);
+                                    moves.add(Move.fCounter);
+                                }
+                                if (Utils.oneOnSide(translate.get('F'), down)) {
+                                    moves.add(Move.dEighty);
+                                }
+                            }
+                        }
+                        moves.add(Move.bEighty);
+                    } else {
+                        moves.add(Move.fEighty);
                     }
 
+                } if (uCount == 2) {
+                    Edge upOne = upEdges.get(0);
+                    Edge upTwo = upEdges.get(1);
+                    if (Utils.shareFace(midOne, midTwo)) {
+                        Character sharedMid = Utils.commonFace(midOne, midTwo);
+                        translate = Utils.horizontalMap(sharedMid);
+                        if (Utils.oneOnSide(translate.get('F'), upOne) || Utils.oneOnSide(translate.get('F'), upTwo)) {
+                            if (Utils.oneOnSide(translate.get('L'), upTwo) || Utils.oneOnSide(translate.get('L'), upOne)) {
+                                moves.add(Move.fClock);
+                                moves.add(Move.lCounter);
+                                moves.add(Move.rEighty);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            } else
+                            if (Utils.oneOnSide(translate.get('R'), upTwo) || Utils.oneOnSide(translate.get('R'), upOne)) {
+                                moves.add(Move.fCounter);
+                                moves.add(Move.lEighty);
+                                moves.add(Move.rClock);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            } else
+                            if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
+                                moves.add(Move.bEighty);
+                                moves.add(Move.uEighty);
+                                moves.add(Move.bRandom);
+                                notDone = false;
+                            }
+                        } else
+                        if (Utils.oneOnSide(translate.get('L'), upOne) || Utils.oneOnSide(translate.get('L'), upTwo)) {
+                            if (Utils.oneOnSide(translate.get('R'), upTwo) || Utils.oneOnSide(translate.get('R'), upOne)) {
+                                moves.add(Move.fRandom);
+                                moves.add(Move.lCounter);
+                                moves.add(Move.rClock);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            } else
+                            if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
+                                moves.add(Move.fRandom);
+                                moves.add(Move.bCounter);
+                                moves.add(Move.lCounter);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            }
+                        } else
+                        if (Utils.oneOnSide(translate.get('R'), upOne) || Utils.oneOnSide(translate.get('R'), upTwo)) {
+                            if (Utils.oneOnSide(translate.get('B'), upTwo) || Utils.oneOnSide(translate.get('B'), upOne)) {
+                                moves.add(Move.fRandom);
+                                moves.add(Move.bClock);
+                                moves.add(Move.rClock);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            }
+                        }
+                    }
+                } else  if (dCount == 2) {
+                    Edge downOne = downEdges.get(0);
+                    Edge downTwo = downEdges.get(1);
+                    if (Utils.shareFace(midOne, midTwo)) {
+                        Character sharedMid = Utils.commonFace(midOne, midTwo);
+                        translate = Utils.horizontalMap(sharedMid);
+                        if (Utils.oneOnSide(translate.get('F'), downOne) || Utils.oneOnSide(translate.get('F'), downTwo)) {
+                            if (Utils.oneOnSide(translate.get('L'), downTwo) || Utils.oneOnSide(translate.get('L'), downOne)) {
+                                moves.add(Move.fCounter);
+                                moves.add(Move.lClock);
+                                moves.add(Move.rEighty);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            } else
+                            if (Utils.oneOnSide(translate.get('R'), downTwo) || Utils.oneOnSide(translate.get('R'), downOne)) {
+                                moves.add(Move.fClock);
+                                moves.add(Move.rCounter);
+                                moves.add(Move.lEighty);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            } else
+                            if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
+                                moves.add(Move.bEighty);
+                                moves.add(Move.dEighty);
+                                moves.add(Move.bRandom);
+                                notDone = false;
+                            }
+                        } else
+                        if (Utils.oneOnSide(translate.get('L'), downOne) || Utils.oneOnSide(translate.get('L'), downTwo)) {
+                            if (Utils.oneOnSide(translate.get('R'), downTwo) || Utils.oneOnSide(translate.get('R'), downOne)) {
+                                moves.add(Move.fRandom);
+                                moves.add(Move.lClock);
+                                moves.add(Move.rCounter);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            } else
+                            if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
+                                moves.add(Move.fRandom);
+                                moves.add(Move.bClock);
+                                moves.add(Move.lClock);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            }
+                        } else
+                        if (Utils.oneOnSide(translate.get('R'), downOne) || Utils.oneOnSide(translate.get('R'), downTwo)) {
+                            if (Utils.oneOnSide(translate.get('B'), downTwo) || Utils.oneOnSide(translate.get('B'), downOne)) {
+                                moves.add(Move.fRandom);
+                                moves.add(Move.bCounter);
+                                moves.add(Move.rCounter);
+                                moves.add(Move.fRandom);
+                                notDone = false;
+                            }
+                        }
+                    }
                 }
-
             }
             this.translateAndExecute(translate, moves);
         }
+
+
+        
+
+
+
+
+
+
+
+
+
 
 
     }

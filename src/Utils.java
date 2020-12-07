@@ -15,6 +15,22 @@ public class Utils {
         }
     }
 
+    static Character otherSide(Character c, Edge e) {
+        if (e.primary.equals(c)) {
+            return e.secondary;
+        } else {
+            return e.primary;
+        }
+    }
+
+    static Character commonFace(Edge e, Edge f) {
+        if (e.primary.equals(f.primary)) {
+            return e.primary;
+        } else {
+            return f.secondary;
+        }
+    }
+
     static boolean onSide(Character c, Edge one, Edge two) {
         return c.equals(one.primary) || c.equals(one.secondary) || c.equals(two.primary) || c.equals(two.secondary);
     }
