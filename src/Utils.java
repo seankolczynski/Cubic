@@ -157,5 +157,15 @@ public class Utils {
             case 52:
                 return Move.dEighty;
         }
+        throw new IllegalArgumentException();
+    }
+
+    public static boolean inOrbit(int num, Character ud, Character fb, Character lr) {
+        Corner corn = Corner.getCorner(ud, fb, lr);
+        if (num <= 4) {
+            return (corn.equals(Corner.UBL) || corn.equals(Corner.DFL) || corn.equals(Corner.DBR) || corn.equals(Corner.DFR));
+        } else {
+            return (corn.equals(Corner.UFL) || corn.equals(Corner.DBL) || corn.equals(Corner.UFR) || corn.equals(Corner.UBR));
+        }
     }
 }

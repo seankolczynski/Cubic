@@ -1679,7 +1679,84 @@ public class Thistlethwaite {
     }
 
     private void phaseThree() {
+        this.phaseThreeA();
+
+    }
+
+    //Correct corners that are out of orbit
+    private void phaseThreeA() {
+        Side frontFace = this.cube.getSide(this.colorToFace.get('F'));
+        Side backFace = this.cube.getSide(this.colorToFace.get('B'));
+        Side upFace = this.cube.getSide(this.colorToFace.get('U'));
+        Side downFace = this.cube.getSide(this.colorToFace.get('D'));
+        Side leftFace = this.cube.getSide(this.colorToFace.get('L'));
+        Side rightFace = this.cube.getSide(this.colorToFace.get('R'));
+        translate = Utils.horizontalMap('F');
+        Character ud = null;
+        Character fb = null;
+        Character lr = null;
+        boolean adding = false;
+        ArrayList notOrbital = new ArrayList();
+        for (int c = 1; c <= 8; c++) {
+            switch (Corner.numToCorner(c)) {
+                case UFL -> {
+                    ud = upFace.squares[0][0];
+                    fb = frontFace.squares[0][2];
+                    lr = leftFace.squares[2][2];
+                    break;
+                }
+                case UFR -> {
+                    ud = upFace.squares[2][0];
+                    fb = frontFace.squares[2][2];
+                    lr = rightFace.squares[0][2];
+                    break;
+                }
+                case UBL -> {
+                    ud = upFace.squares[0][2];
+                    fb = backFace.squares[2][2];
+                    lr = leftFace.squares[0][2];
+                    break;
+                }
+                case UBR -> {
+                    ud = upFace.squares[2][2];
+                    fb = backFace.squares[0][2];
+                    lr = rightFace.squares[2][2];
+                    break;
+                }
+                case DFL -> {
+                    ud = downFace.squares[0][2];
+                    fb = frontFace.squares[0][0];
+                    lr = leftFace.squares[2][0];
+                    break;
+                }
+                case DFR -> {
+                    ud = downFace.squares[2][2];
+                    fb = frontFace.squares[2][0];
+                    lr = rightFace.squares[0][0];
+                    break;
+                }
+                case DBL -> {
+                    ud = downFace.squares[0][0];
+                    fb = backFace.squares[2][0];
+                    lr = leftFace.squares[0][0];
+                    break;
+                }
+                case DBR -> {
+                    ud = downFace.squares[2][0];
+                    fb = backFace.squares[0][0];
+                    lr = rightFace.squares[0][2];
+                    break;
+                }
+            }
+            adding = Utils.inOrbit(c, ud, fb, lr);
+            if (adding) {
+                notOrbital.add(c);
+            }
+        }
+
         
+
+
     }
 
 

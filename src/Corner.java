@@ -43,4 +43,36 @@ public enum Corner {
         }
     }
 
+    public static Corner getCorner(Character ud, Character fb, Character lr) {
+        if (ud.equals('U')) {
+            if (fb.equals('F')) {
+                if (lr.equals('L')) {
+                    return UFL;
+                } else {
+                    return UFR;
+                }
+            } else {
+                if (lr.equals('L')) {
+                    return UBL;
+                } else {
+                    return UBR;
+                }
+            }
+        } else {
+            if (fb.equals('F')) {
+                if (lr.equals('L')) {
+                    return DFL;
+                } else {
+                    return DFR;
+                }
+            } else {
+                if (lr.equals('L')) {
+                    return DBL;
+                } else {
+                    return DBR;
+                }
+            }
+        }
+    }
+
 }
