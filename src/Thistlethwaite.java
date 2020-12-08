@@ -28,7 +28,7 @@ public class Thistlethwaite {
         this.phaseOne();
         this.phaseTwo();
         this.phaseThree();
-
+        this.phaseFour();
         return cube;
     }
 
@@ -1680,7 +1680,7 @@ public class Thistlethwaite {
 
     private void phaseThree() {
         this.phaseThreeA();
-
+        this.phaseThreeB();
     }
 
     //Correct corners that are out of orbit
@@ -1696,57 +1696,190 @@ public class Thistlethwaite {
         Character fb = null;
         Character lr = null;
         boolean adding = false;
-        ArrayList notOrbital = new ArrayList();
+        ArrayList<Integer> notOrbital = new ArrayList<Integer>();
         for (int c = 1; c <= 8; c++) {
             switch (Corner.numToCorner(c)) {
-                case UFL -> {
+                case UFL:
                     ud = upFace.squares[0][0];
                     fb = frontFace.squares[0][2];
                     lr = leftFace.squares[2][2];
                     break;
-                }
-                case UFR -> {
+                case UFR:
                     ud = upFace.squares[2][0];
                     fb = frontFace.squares[2][2];
                     lr = rightFace.squares[0][2];
                     break;
-                }
-                case UBL -> {
+                case UBL:
                     ud = upFace.squares[0][2];
                     fb = backFace.squares[2][2];
                     lr = leftFace.squares[0][2];
                     break;
-                }
-                case UBR -> {
+                case UBR:
                     ud = upFace.squares[2][2];
                     fb = backFace.squares[0][2];
                     lr = rightFace.squares[2][2];
                     break;
-                }
-                case DFL -> {
+
+                case DFL:
                     ud = downFace.squares[0][2];
                     fb = frontFace.squares[0][0];
                     lr = leftFace.squares[2][0];
                     break;
-                }
-                case DFR -> {
+
+                case DFR:
                     ud = downFace.squares[2][2];
                     fb = frontFace.squares[2][0];
                     lr = rightFace.squares[0][0];
                     break;
-                }
-                case DBL -> {
+
+                case DBL:
                     ud = downFace.squares[0][0];
                     fb = backFace.squares[2][0];
                     lr = leftFace.squares[0][0];
                     break;
-                }
-                case DBR -> {
+
+                case DBR:
                     ud = downFace.squares[2][0];
                     fb = backFace.squares[0][0];
                     lr = rightFace.squares[0][2];
                     break;
+
+            }
+            adding = Utils.inOrbit(c, ud, fb, lr);
+            if (adding) {
+                notOrbital.add(c);
+            }
+        }
+        ArrayList<Move> moves = new ArrayList<Move>();
+        switch(notOrbital.size()) {
+            case 0:
+                break;
+            case 2:
+                int notOne = notOrbital.get(1);
+                if (notOne == 7) {
+                    moves.add(Move.fEighty);
+                } else if (notOne == 8) {
+                    moves.add(Move.lEighty);
+                    moves.add(Move.uEighty);
                 }
+                break;
+            case 4:
+                int second = notOrbital.get(1);
+                int third = notOrbital.get(2);
+                int fourth = notOrbital.get(3);
+                if (second == 2) {
+                    if (fourth == 6) {
+                        moves.add(Move.lClock);
+                    } else if (fourth == 7) {
+                        moves.add(Move.lClock);
+                        moves.add(Move.fEighty);
+                    } else if (fourth == 8) {
+                        moves.add(Move.lCounter);
+                        moves.add(Move.uEighty);
+                    }
+                } else if (second == 3) {
+                    if (third == 6) {
+                        moves.add(Move.uEighty);
+                    } else if (fourth == 7) {
+                        moves.add(Move.rEighty);
+                        moves.add(Move.fEighty);
+                    } else if (fourth == 8) {
+                        moves.add(Move.lClock);
+                        moves.add(Move.uEighty);
+                    }
+                }
+                break;
+            case 6:
+                int secondSix = notOrbital.get(1);
+                int thirdSix = notOrbital.get(2);
+                int fourthSix = notOrbital.get(3);
+                int fifthSix = notOrbital.get(4);
+                int sixthSix = notOrbital.get(5);
+                if (fifthSix == 6) {
+                    moves.add(Move.lClock);
+                } else if (fourthSix == 5) {
+                    moves.add(Move.fEighty);
+                    moves.add(Move.rClock);
+                } else if (fourthSix == 6) {
+                    moves.add(Move.lClock);
+                    moves.add(Move.rClock);
+                    moves.add(Move.uEighty);
+                }
+                break;
+            case 8:
+                moves.add(Move.lClock);
+                moves.add(Move.rClock);
+                break;
+
+        }
+        translateAndExecute(translate, moves);
+
+    }
+
+
+    public void phaseThreeB() {
+        Side frontFace = this.cube.getSide(this.colorToFace.get('F'));
+        Side backFace = this.cube.getSide(this.colorToFace.get('B'));
+        Side upFace = this.cube.getSide(this.colorToFace.get('U'));
+        Side downFace = this.cube.getSide(this.colorToFace.get('D'));
+        Side leftFace = this.cube.getSide(this.colorToFace.get('L'));
+        Side rightFace = this.cube.getSide(this.colorToFace.get('R'));
+        translate = Utils.horizontalMap('F');
+        Character ud = null;
+        Character fb = null;
+        Character lr = null;
+        boolean adding = false;
+        ArrayList<Integer> notOrbital = new ArrayList<Integer>();
+        for (int c = 1; c <= 8; c++) {
+            switch (Corner.numToCorner(c)) {
+                case UFL:
+                    ud = upFace.squares[0][0];
+                    fb = frontFace.squares[0][2];
+                    lr = leftFace.squares[2][2];
+                    break;
+
+                case UFR:
+                    ud = upFace.squares[2][0];
+                    fb = frontFace.squares[2][2];
+                    lr = rightFace.squares[0][2];
+                    break;
+
+                case UBL:
+                    ud = upFace.squares[0][2];
+                    fb = backFace.squares[2][2];
+                    lr = leftFace.squares[0][2];
+                    break;
+
+                case UBR:
+                    ud = upFace.squares[2][2];
+                    fb = backFace.squares[0][2];
+                    lr = rightFace.squares[2][2];
+                    break;
+
+                case DFL:
+                    ud = downFace.squares[0][2];
+                    fb = frontFace.squares[0][0];
+                    lr = leftFace.squares[2][0];
+                    break;
+
+                case DFR:
+                    ud = downFace.squares[2][2];
+                    fb = frontFace.squares[2][0];
+                    lr = rightFace.squares[0][0];
+                    break;
+
+                case DBL:
+                    ud = downFace.squares[0][0];
+                    fb = backFace.squares[2][0];
+                    lr = leftFace.squares[0][0];
+                    break;
+
+                case DBR:
+                    ud = downFace.squares[2][0];
+                    fb = backFace.squares[0][0];
+                    lr = rightFace.squares[0][2];
+                    break;
+
             }
             adding = Utils.inOrbit(c, ud, fb, lr);
             if (adding) {
@@ -1754,10 +1887,152 @@ public class Thistlethwaite {
             }
         }
 
-        
+        Character upDown;
+        Character frontBack;
+        Character leftRight;
+        int sideEdge;
+        int position = 0;
+        int[] positions = new int[4];
+
+        for (Edge e : Utils.stage3Edges()) {
+            position++;
+            switch (e) {
+                case UL:
+                    upDown = upFace.getSquares()[0][1];
+                    leftRight = leftFace.getSquares()[1][2];
+                    sideEdge = Utils.getStage3(leftRight, upDown);
+                    break;
+                case DL:
+                    upDown = downFace.getSquares()[0][1];
+                    leftRight = leftFace.getSquares()[1][0];
+                    sideEdge = Utils.getStage3(leftRight, upDown);
+                    break;
+                case UR:
+                    upDown = upFace.getSquares()[2][1];
+                    leftRight = rightFace.getSquares()[1][2];
+                    sideEdge = Utils.getStage3(leftRight, upDown);
+                    break;
+                case DR:
+                    upDown = downFace.getSquares()[2][1];
+                    leftRight = rightFace.getSquares()[1][0];
+                    sideEdge = Utils.getStage3(leftRight, upDown);
+                    break;
+                case BL:
+                    frontBack = backFace.getSquares()[2][1];
+                    leftRight = rightFace.getSquares()[0][1];
+                    sideEdge = Utils.getStage3(leftRight, frontBack);
+                    break;
+                case FL:
+                    frontBack = frontFace.getSquares()[0][1];
+                    leftRight = leftFace.getSquares()[2][1];
+                    sideEdge = Utils.getStage3(leftRight, frontBack);
+                    break;
+                case FR:
+                    frontBack = frontFace.getSquares()[2][1];
+                    leftRight = rightFace.getSquares()[0][1];
+                    sideEdge = Utils.getStage3(leftRight, frontBack);
+                    break;
+                case BR:
+                    leftRight = leftFace.getSquares()[2][1];
+                    frontBack = backFace.getSquares()[0][1];
+                    sideEdge = Utils.getStage3(leftRight, frontBack);
+                    break;
+                default:
+                    sideEdge = 0;
+            }
+            if (sideEdge != 0) {
+                positions[sideEdge] = position;
+            }
+        }
+
+
+        switch (notOrbital.size()) {
+            case 0:
+
+        }
 
 
     }
 
+    public void phaseFour() {
+        Side frontFace = this.cube.getSide(this.colorToFace.get('F'));
+        Side backFace = this.cube.getSide(this.colorToFace.get('B'));
+        Side rightFace = this.cube.getSide(this.colorToFace.get('R'));
+        Side leftFace = this.cube.getSide(this.colorToFace.get('L'));
+        Side upFace = this.cube.getSide(this.colorToFace.get('U'));
+        Side downFace = this.cube.getSide(this.colorToFace.get('D'));
+
+        boolean[] fb = new boolean[4];
+        boolean[] ud = new boolean[4];
+        boolean[] lr = new boolean[4];
+
+        for (Edge e : Edge.values()) {
+            switch (e) {
+                case UL:
+                    if (!upFace.getSquares()[0][1].equals('U') || !leftFace.getSquares()[1][2].equals('L')) {
+                        fb[0] = true;
+                    }
+                    break;
+                case DL:
+                    if (!downFace.getSquares()[0][1].equals('D') || !leftFace.getSquares()[1][0].equals('L')) {
+                        fb[1] = true;
+                    }
+                    break;
+                case DR:
+                    if (!downFace.getSquares()[2][1].equals('D') || !rightFace.getSquares()[1][0].equals('R')) {
+                        fb[2] = true;
+                    }
+                    break;
+                case UR:
+                    if (!upFace.getSquares()[2][1].equals('U') || !rightFace.getSquares()[1][2].equals('R')) {
+                        fb[3] = true;
+                    }
+                    break;
+                case BL:
+                    if (!backFace.getSquares()[2][1].equals('B') || !leftFace.getSquares()[0][1].equals('L')) {
+                        ud[0] = true;
+                    }
+                    break;
+                case FL:
+                    if (!frontFace.getSquares()[0][1].equals('F') || !leftFace.getSquares()[2][1].equals('L')) {
+                        ud[1] = true;
+                    }
+                    break;
+                case FR:
+                    if (!frontFace.getSquares()[2][1].equals('F') || !rightFace.getSquares()[0][1].equals('R')) {
+                        ud[2] = true;
+                    }
+                    break;
+                case BR:
+                    if (!backFace.getSquares()[2][1].equals('B') || !rightFace.getSquares()[0][1].equals('R')) {
+                        ud[3] = true;
+                    }
+                    break;
+                case FU:
+                    if (!frontFace.getSquares()[1][2].equals('F') || !upFace.getSquares()[1][0].equals('U')) {
+                        lr[0] = true;
+                    }
+                    break;
+                case FD:
+                    if (!frontFace.getSquares()[1][0].equals('F') || !downFace.getSquares()[1][2].equals('D')) {
+                        lr[1] = true;
+                    }
+                    break;
+                case BD:
+                    if (!backFace.getSquares()[1][0].equals('B') || !downFace.getSquares()[1][0].equals('D')) {
+                        lr[0] = true;
+                    }
+                    break;
+                case BU:
+                    if (!backFace.getSquares()[1][2].equals('B') || !upFace.getSquares()[1][2].equals('U')) {
+                        lr[0] = true;
+                    }
+                    break;
+            }
+
+
+        }
+
+    }
 
 }

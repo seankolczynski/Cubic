@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Utils {
 
@@ -168,4 +169,95 @@ public class Utils {
             return (corn.equals(Corner.UFL) || corn.equals(Corner.DBL) || corn.equals(Corner.UFR) || corn.equals(Corner.UBR));
         }
     }
+
+    public static ArrayList<Edge> stage3Edges() {
+        ArrayList<Edge> udSlice = new ArrayList<Edge>();
+        udSlice.add(Edge.UL);
+        udSlice.add(Edge.DL);
+        udSlice.add(Edge.UR);
+        udSlice.add(Edge.DR);
+        udSlice.add(Edge.BL);
+        udSlice.add(Edge.FL);
+        udSlice.add(Edge.FR);
+        udSlice.add(Edge.BR);
+        return udSlice;
+    }
+    
+    public static int getStage3(Character leftRight, Character other) {
+        if (leftRight.equals('L') && other.equals('U')) {
+            return 1;
+        }
+        if (leftRight.equals('L') && other.equals('D')) {
+            return 2;
+        }
+        if (leftRight.equals('R') && other.equals('U')) {
+            return 3;
+        }
+        if (leftRight.equals('R') && other.equals('D')) {
+            return 4;
+        }
+        return 0;
+    }
+
+
+
+    public static Cube rotateCommands(Cube c, String commands) {
+        ArrayList<Move> moves = new ArrayList<Move>();
+        Stack<Character> stack = new Stack<Character>();
+        for (Character ch : commands.toCharArray()) {
+            if (!ch.equals(' ')) {
+                stack.push(ch);
+            }
+        }
+        while (!stack.empty()) {
+            Character com = stack.pop();
+            switch (com) {
+                case '1':
+                    moves.add(Move.lEighty);
+                    break;
+                case '2':
+                    moves.add(Move.fEighty);
+                    break;
+                case '3':
+                    moves.add(Move.rEighty);
+                    break;
+                case '4':
+                    moves.add(Move.bEighty);
+                    break;
+                case '5':
+                    moves.add(Move.uEighty);
+                    break;
+                case '6':
+                    moves.add(Move.dEighty);
+                    break;
+            }
+        }
+
+        for (Move move : moves) {
+            switch (move) {
+                case lEighty:
+                    c.oneEighty(Color.ORANGE);
+                    break;
+                case fEighty:
+                    c.oneEighty(Color.GREEN);
+                    break;
+                case rEighty:
+                    c.oneEighty(Color.RED);
+                    break;
+                case bEighty:
+                    c.oneEighty(Color.BLUE);
+                    break;
+                case uEighty:
+                    c.oneEighty(Color.WHITE);
+                    break;
+                case dEighty:
+                    c.oneEighty(Color.YELLOW);
+                    break;
+            }
+        }
+        return c;
+
+    }
+
 }
+
