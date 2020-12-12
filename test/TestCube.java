@@ -387,7 +387,7 @@ public class TestCube {
     @Test
     public void testStage4() {
         Cube c = new Cube();
-        String commands = "1 2 1 2 1 2 1 5 1 6 3 6";
+        String commands = "1 2 1 2 1 3 5 1 6 1 5 2";
         Utils.rotateCommands(c, commands);
         System.out.println(c.toString());
 

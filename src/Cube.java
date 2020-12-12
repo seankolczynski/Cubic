@@ -188,5 +188,64 @@ public class Cube {
         return sb.toString();
     }
 
+    public String toFlat() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.red.getSquares()[2][0]);
+        sb.append(this.red.getSquares()[2][1]);
+        sb.append(this.red.getSquares()[2][2]);
+        sb.append(this.red.getSquares()[1][0]);
+        sb.append(this.red.getSquares()[1][1]);
+        sb.append(this.red.getSquares()[1][2]);
+        sb.append(this.red.getSquares()[0][0]);
+        sb.append(this.red.getSquares()[0][1]);
+        sb.append(this.red.getSquares()[0][2]);
+        sb.append(this.green.getSquares()[2][2]);
+        sb.append(this.green.getSquares()[2][1]);
+        sb.append(this.green.getSquares()[2][0]);
+        sb.append(this.yellow.getSquares()[2][2]);
+        sb.append(this.yellow.getSquares()[2][1]);
+        sb.append(this.yellow.getSquares()[2][0]);
+        sb.append(this.blue.getSquares()[0][0]);
+        sb.append(this.blue.getSquares()[0][1]);
+        sb.append(this.blue.getSquares()[0][2]);
+        sb.append(this.white.getSquares()[2][2]);
+        sb.append(this.white.getSquares()[2][1]);
+        sb.append(this.white.getSquares()[2][0]);
+        sb.append(this.green.getSquares()[1][2]);
+        sb.append(this.green.getSquares()[1][1]);
+        sb.append(this.green.getSquares()[1][0]);
+        sb.append(this.yellow.getSquares()[1][2]);
+        sb.append(this.yellow.getSquares()[1][1]);
+        sb.append(this.yellow.getSquares()[1][0]);
+        sb.append(this.blue.getSquares()[1][0]);
+        sb.append(this.blue.getSquares()[1][1]);
+        sb.append(this.blue.getSquares()[1][2]);
+        sb.append(this.white.getSquares()[1][2]);
+        sb.append(this.white.getSquares()[1][1]);
+        sb.append(this.white.getSquares()[1][0]);
+        sb.append(this.green.getSquares()[0][2]);
+        sb.append(this.green.getSquares()[0][1]);
+        sb.append(this.green.getSquares()[0][0]);
+        sb.append(this.yellow.getSquares()[0][2]);
+        sb.append(this.yellow.getSquares()[0][1]);
+        sb.append(this.yellow.getSquares()[0][0]);
+        sb.append(this.blue.getSquares()[2][0]);
+        sb.append(this.blue.getSquares()[2][1]);
+        sb.append(this.blue.getSquares()[2][2]);
+        sb.append(this.white.getSquares()[0][2]);
+        sb.append(this.white.getSquares()[0][1]);
+        sb.append(this.white.getSquares()[0][0]);
+        sb.append(this.orange.getSquares()[2][0]);
+        sb.append(this.orange.getSquares()[1][0]);
+        sb.append(this.orange.getSquares()[0][0]);
+        sb.append(this.orange.getSquares()[2][1]);
+        sb.append(this.orange.getSquares()[1][1]);
+        sb.append(this.orange.getSquares()[0][1]);
+        sb.append(this.orange.getSquares()[2][2]);
+        sb.append(this.orange.getSquares()[1][2]);
+        sb.append(this.orange.getSquares()[0][2]);
+        return sb.toString();
+    }
+
 
 }

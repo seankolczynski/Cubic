@@ -11,12 +11,19 @@ public class Thistlethwaite {
     Random r;
     HashMap<Character, Character> translate;
     HashMap<Integer, Integer> cornerRows;
+    HashMap<String, Integer> fbSlice;
+    HashMap<String, Integer> udSlice;
+    HashMap<String, Integer> lrSlice;
+    HashMap<TripleKey, Integer> finalKey = Utils.keyChain();
 
 
     public Thistlethwaite() {
         this.r = new Random();
         try {
             this.cornerRows = Utils.initialize();
+            this.fbSlice = Utils.fbInit();
+            this.udSlice = Utils.udInit();
+            this.lrSlice = Utils.lrInit();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -25,10 +32,14 @@ public class Thistlethwaite {
     public Cube solve(Cube cube) {
         this.cube = cube;
         colorToFace = this.pairSides();
+        System.out.println("Cube to be solved:\n");
+        System.out.println(cube.toString());
         this.phaseOne();
         this.phaseTwo();
         this.phaseThree();
         this.phaseFour();
+        System.out.println("SOLVED!");
+        System.out.println(cube.toString());
         return cube;
     }
 
@@ -1955,6 +1966,7 @@ public class Thistlethwaite {
     }
 
     public void phaseFour() {
+        ArrayList<Move> moves = new ArrayList<Move>();
         Side frontFace = this.cube.getSide(this.colorToFace.get('F'));
         Side backFace = this.cube.getSide(this.colorToFace.get('B'));
         Side rightFace = this.cube.getSide(this.colorToFace.get('R'));
@@ -1962,77 +1974,58 @@ public class Thistlethwaite {
         Side upFace = this.cube.getSide(this.colorToFace.get('U'));
         Side downFace = this.cube.getSide(this.colorToFace.get('D'));
 
-        boolean[] fb = new boolean[4];
-        boolean[] ud = new boolean[4];
-        boolean[] lr = new boolean[4];
-
-        for (Edge e : Edge.values()) {
-            switch (e) {
-                case UL:
-                    if (!upFace.getSquares()[0][1].equals('U') || !leftFace.getSquares()[1][2].equals('L')) {
-                        fb[0] = true;
-                    }
-                    break;
-                case DL:
-                    if (!downFace.getSquares()[0][1].equals('D') || !leftFace.getSquares()[1][0].equals('L')) {
-                        fb[1] = true;
-                    }
-                    break;
-                case DR:
-                    if (!downFace.getSquares()[2][1].equals('D') || !rightFace.getSquares()[1][0].equals('R')) {
-                        fb[2] = true;
-                    }
-                    break;
-                case UR:
-                    if (!upFace.getSquares()[2][1].equals('U') || !rightFace.getSquares()[1][2].equals('R')) {
-                        fb[3] = true;
-                    }
-                    break;
-                case BL:
-                    if (!backFace.getSquares()[2][1].equals('B') || !leftFace.getSquares()[0][1].equals('L')) {
-                        ud[0] = true;
-                    }
-                    break;
-                case FL:
-                    if (!frontFace.getSquares()[0][1].equals('F') || !leftFace.getSquares()[2][1].equals('L')) {
-                        ud[1] = true;
-                    }
-                    break;
-                case FR:
-                    if (!frontFace.getSquares()[2][1].equals('F') || !rightFace.getSquares()[0][1].equals('R')) {
-                        ud[2] = true;
-                    }
-                    break;
-                case BR:
-                    if (!backFace.getSquares()[2][1].equals('B') || !rightFace.getSquares()[0][1].equals('R')) {
-                        ud[3] = true;
-                    }
-                    break;
-                case FU:
-                    if (!frontFace.getSquares()[1][2].equals('F') || !upFace.getSquares()[1][0].equals('U')) {
-                        lr[0] = true;
-                    }
-                    break;
-                case FD:
-                    if (!frontFace.getSquares()[1][0].equals('F') || !downFace.getSquares()[1][2].equals('D')) {
-                        lr[1] = true;
-                    }
-                    break;
-                case BD:
-                    if (!backFace.getSquares()[1][0].equals('B') || !downFace.getSquares()[1][0].equals('D')) {
-                        lr[0] = true;
-                    }
-                    break;
-                case BU:
-                    if (!backFace.getSquares()[1][2].equals('B') || !upFace.getSquares()[1][2].equals('U')) {
-                        lr[0] = true;
-                    }
-                    break;
-            }
 
 
-        }
+        StringBuffer FB = new StringBuffer();
+        StringBuffer UD = new StringBuffer();
+        StringBuffer LR = new StringBuffer();
 
+        FB.append(leftFace.getSquares()[1][2]);
+        FB.append(upFace.getSquares()[0][1]);
+
+        FB.append(leftFace.getSquares()[1][0]);
+        FB.append(downFace.getSquares()[0][1]);
+
+        FB.append(rightFace.getSquares()[2][1]);
+        FB.append(downFace.getSquares()[2][1]);
+
+        FB.append(rightFace.getSquares()[1][2]);
+        FB.append(upFace.getSquares()[2][1]);
+
+        UD.append(leftFace.getSquares()[0][1]);
+        UD.append(backFace.getSquares()[2][1]);
+
+        UD.append(leftFace.getSquares()[2][1]);
+        UD.append(frontFace.getSquares()[0][1]);
+
+        UD.append(rightFace.getSquares()[0][1]);
+        UD.append(frontFace.getSquares()[2][1]);
+
+        UD.append(rightFace.getSquares()[2][1]);
+        UD.append(backFace.getSquares()[0][1]);
+
+        LR.append(frontFace.getSquares()[1][2]);
+        LR.append(upFace.getSquares()[1][0]);
+
+        LR.append(frontFace.getSquares()[1][0]);
+        LR.append(downFace.getSquares()[1][2]);
+
+        LR.append(backFace.getSquares()[1][0]);
+        LR.append(downFace.getSquares()[1][0]);
+
+        LR.append(backFace.getSquares()[1][2]);
+        LR.append(upFace.getSquares()[1][2]);
+
+        int FBint = fbSlice.get(FB.toString());
+        int UDint = udSlice.get(UD.toString());
+        int LRint = lrSlice.get(LR.toString());
+
+        int fin = finalKey.get(new TripleKey(FBint, UDint, LRint));
+
+        moves = Utils.grabFinalMoves(fin);
+        translate = Utils.horizontalMap('F');
+
+        this.translateAndExecute(translate, moves);
     }
 
 }
